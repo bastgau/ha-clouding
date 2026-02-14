@@ -55,7 +55,7 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
     coordinator: CloudingDataUpdateCoordinator = clouding_current_config_entry.runtime_data
 
     # response = await coordinator.api.get_servers()
-    _LOGGER.error(
+    _LOGGER.debug(
         f"Action '{action}' forn '{device.name}' from '{clouding_current_config_entry.title}' will be performed."
     )
 
