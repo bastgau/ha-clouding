@@ -1,0 +1,61 @@
+{
+    "entity": {
+        "sensor": {
+            "flavor": {
+                "default": "mdi:server-outline"
+            },
+            "hostname": {
+                "default": "mdi:server-outline"
+            },
+            "private_ip": {
+                "default": "mdi:ip"
+            },
+            "dns_address": {
+                "default": "mdi:web"
+            },
+            "name": {
+                "default": "mdi:label-outline"
+            },
+            "public_ip": {
+                "default": "mdi:ip"
+            },
+            "status": {
+                "default": "mdi:check-circle-outline"
+            },
+            "vcores": {
+                "default": "mdi:cpu-64-bit"
+            }
+        },
+        "switch": {
+            "block": {
+                "default": "mdi:lock"
+            },
+            "linked_charge_cards": {
+                "default": "mdi:account-group"
+            },
+            "plug_and_charge": {
+                "default": "mdi:ev-plug-type2"
+            }
+        }
+    },
+    "services": {
+        "start_server": {
+            "service": "mdi:play"
+        },
+        "stop_server": {
+            "service": "mdi:stop"
+        },
+        "hard_reboot_server": {
+            "service": "mdi:restart-alert"
+        },
+        "reboot_server": {
+            "service": "mdi:restart"
+        },
+        "archive_server": {
+            "service": "mdi:archive-arrow-down"
+        },
+        "unarchive_server": {
+            "service": "mdi:archive-arrow-up"
+        }
+    }
+}

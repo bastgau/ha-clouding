@@ -1,0 +1,47 @@
+start_server:
+  fields:
+    device_id:
+      selector:
+        device:
+          integration: clouding
+      required: true
+
+stop_server:
+  fields:
+    device_id:
+      selector:
+        device:
+          integration: clouding
+      required: true
+
+hard_reboot_server:
+  fields:
+    device_id:
+      selector:
+        device:
+          integration: clouding
+      required: true
+
+reboot_server:
+  fields:
+    device_id:
+      selector:
+        device:
+          integration: clouding
+      required: true
+
+archive_server:
+  fields:
+    device_id:
+      selector:
+        device:
+          integration: clouding
+      required: true
+
+unarchive_server:
+  fields:
+    device_id:
+      selector:
+        device:
+          integration: clouding
+      required: true
