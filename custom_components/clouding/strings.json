@@ -1,0 +1,52 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "[%key:common::config_flow::abort::already_configured_device%]",
+      "reauth_successful": "[%key:common::config_flow::abort::reauth_successful%]",
+      "reconfigure_successful": "[%key:common::config_flow::abort::reconfigure_successful%]"
+    },
+    "error": {
+      "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+      "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+      "unknown": "[%key:common::config_flow::error::unknown%]"
+    },
+    "step": {
+      "reauth_confirm": {
+        "data": {
+          "api_key": "[%key:common::config_flow::data::api_key%]"
+        },
+        "data_description": {
+          "api_key": "[%key:component::clouding::config::step::user::data_description::api_key%]"
+        },
+        "description": "The API key for **{name}** is invalid. To re-authenticate with Clouding.io provide a new API key below",
+        "title": "Re-authenticate with Clouding.io: {name}"
+      },
+      "reconfigure": {
+        "data": {
+          "api_key": "[%key:common::config_flow::data::api_key%]"
+        },
+        "data_description": {
+          "api_key": "[%key:component::clouding::config::step::user::data_description::api_key%]"
+        },
+        "title": "Update configuration for Clouding.io"
+      },
+      "user": {
+        "data": {
+          "api_key": "[%key:common::config_flow::data::api_key%]"
+        },
+        "data_description": {
+          "api_key": "Enter an API key."
+        },
+        "description": "Set up **Clouding.io** service"
+      }
+    }
+  },
+  "exceptions": {
+    "auth_failed_exception": {
+      "message": "Authentication with Clouding.io failed. Please check that your API key is correct and still valid"
+    },
+    "request_failed_exception": {
+      "message": "Connection to Clouding.io failed"
+    }
+  }
+}
