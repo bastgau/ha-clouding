@@ -49,7 +49,7 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[Dict[str, Any]]):
 
     async def async_update_data(self) -> Dict[str, CloudingServer]:
         """..."""
-        self._async_update_data()
+        await self._async_update_data()
 
     async def _async_update_data(self) -> Dict[str, CloudingServer]:
         """Fetch the latest data from Clouding.io"""
