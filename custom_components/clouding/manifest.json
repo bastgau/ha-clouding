@@ -1,0 +1,17 @@
+{
+  "domain": "clouding",
+  "name": "Clouding.io",
+  "codeowners": [
+    "@bastgau"
+  ],
+  "config_flow": true,
+  "documentation": "https://github.com/bastgau/ha-clouding",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/bastgau/ha-clouding/issues",
+  "loggers": [
+    "clouding"
+  ],
+  "requirements": [],
+  "version": "0.0.0"
+}

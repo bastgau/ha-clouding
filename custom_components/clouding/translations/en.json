@@ -1,0 +1,174 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Device is already configured.",
+            "reauth_successful": "Re-authentication was successful.",
+            "reconfigure_successful": "Re-configuration was successful."
+        },
+        "error": {
+            "cannot_connect": "Failed to connect.",
+            "invalid_auth": "Invalid authentication.",
+            "unknown": "Unexpected error."
+        },
+        "step": {
+            "reauth_confirm": {
+                "data": {
+                    "api_key": "API key"
+                },
+                "data_description": {
+                    "api_key": "Enter an API key."
+                },
+                "description": "The API key for **{name}** is invalid. To re-authenticate with Clouding.io provide a new API key below",
+                "title": "Re-authenticate with Clouding.io: {name}"
+            },
+            "reconfigure": {
+                "data": {
+                    "api_key": "API key"
+                },
+                "data_description": {
+                    "api_key": "Enter an API key."
+                },
+                "title": "Update configuration for Clouding.io"
+            },
+            "user": {
+                "data": {
+                    "name": "Service name",
+                    "api_key": "API key"
+                },
+                "data_description": {
+                    "name": "Enter a service name.",
+                    "api_key": "Enter an API key."
+                },
+                "description": "Set up **Clouding.io** service",
+                "title": "Clouding.io"
+            }
+        }
+    },
+    "options": {
+        "step": {
+            "init": {
+                "data": {
+                    "update_interval": "Data refresh frequency (seconds)"
+                },
+                "description": "After modifying one of these options, it is necessary to reload the service or restart Home Assistant.",
+                "title": "Clouding.io"
+            }
+        },
+        "error": {
+            "invalid_update_interval": "Invalid data refresh frequency. Must be higher than 15 second and lower than 3600 seconds."
+        }
+    },
+    "entity": {
+        "binary_sensor": {
+            "is_running": {
+                "name": "Power State"
+            }
+        },
+        "sensor": {
+            "flavor": {
+                "name": "Flavor"
+            },
+            "hostname": {
+                "name": "Hostname"
+            },
+            "name": {
+                "name": "Name"
+            },
+            "public_ip": {
+                "name": "Public IP"
+            },
+            "status": {
+                "name": "Status"
+            },
+            "ram_gb": {
+                "name": "RAM"
+            },
+            "created_at": {
+                "name": "Creation date"
+            },
+            "dns_address": {
+                "name": "DNS Address"
+            },
+            "vcores": {
+                "name": "VCores",
+                "unit_of_measurement": "vCores"
+            },
+            "volume_size_gb": {
+                "name": "SSD"
+            }
+        }
+    },
+    "exceptions": {
+        "auth_failed_exception": {
+            "message": "Authentication with Clouding.io failed. Please check that your API key is correct and still valid."
+        },
+        "request_failed_exception": {
+            "message": "Connection to Clouding.io failed."
+        },
+        "action_cannot_be_performed": {
+            "message": "Action {action_name} cannot be performed. Bad Request."
+        }
+    },
+    "services": {
+        "start_server": {
+            "description": "Start a Virtual Machine.",
+            "fields": {
+                "device_id": {
+                    "description": "The ID of the Clouding.io Device to start.",
+                    "name": "Device ID"
+                }
+            },
+            "name": "Start Server"
+        },
+        "stop_server": {
+            "description": "Stop a Clouding.io Virtual Machine.",
+            "fields": {
+                "device_id": {
+                    "description": "The ID of the Clouding.io Device to stop.",
+                    "name": "Device ID"
+                }
+            },
+            "name": "Stop Server"
+        },
+        "archive_server": {
+            "description": "Archive a Clouding.io Virtual Machine.",
+            "fields": {
+                "device_id": {
+                    "description": "The ID of the Clouding.io Device to archive.",
+                    "name": "Device ID"
+                }
+            },
+            "name": "Archive Server"
+        },
+        "unarchive_server": {
+            "description": "Unarchive a Clouding.io Virtual Machine.",
+            "fields": {
+                "device_id": {
+                    "description": "The ID of the Clouding.io Device to unarchive.",
+                    "name": "Device ID"
+                }
+            },
+            "name": "Unarchive Server"
+        },
+        "hard_reboot_server": {
+            "description": "Hard Reboot a Clouding.io Virtual Machine.",
+            "fields": {
+                "device_id": {
+                    "description": "The ID of the Clouding.io Device to hard reboot.",
+                    "name": "Device ID"
+                }
+            },
+            "name": "Hard Reboot Server"
+        },
+        "reboot_server": {
+            "description": "Reboot a Clouding.io Virtual Machine.",
+            "fields": {
+                "device_id": {
+                    "description": "The ID of the Clouding.io Device to reboot.",
+                    "name": "Device ID"
+                }
+            },
+            "name": "Reboot Server"
+        }
+    }
+}
