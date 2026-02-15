@@ -1,3 +1,2 @@
 homeassistant==2026.2.0
 ruff==0.14.14
-tenacity==9.1.4
