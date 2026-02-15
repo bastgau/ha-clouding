@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import logging
 from datetime import timedelta
-from typing import List
 
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, ServiceCall
@@ -34,7 +33,10 @@ from .services import (
     async_unarchive_server,
 )
 
-PLATFORMS: List[Platform] = [Platform.SENSOR, Platform.BINARY_SENSOR]
+PLATFORMS: list[Platform] = [
+    Platform.BINARY_SENSOR,
+    Platform.SENSOR,
+]
 
 _SERVICE_MAP = {
     SERVICE_ARCHIVE_SERVER: async_archive_server,

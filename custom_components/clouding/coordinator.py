@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 from datetime import timedelta
-from typing import Any, Dict
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_API_KEY
@@ -29,7 +29,7 @@ SCAN_INTERVAL_UPDATES = timedelta(hours=3)
 type CloudingConfigEntry = ConfigEntry[CloudingDataUpdateCoordinator]
 
 
-class CloudingDataUpdateCoordinator(DataUpdateCoordinator[Dict[str, Any]]):
+class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Update coordinator for Clouding."""
 
     config_entry: CloudingConfigEntry
@@ -47,15 +47,15 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[Dict[str, Any]]):
         session = async_get_clientsession(hass)
         self.api = Clouding(session, config_entry.data[CONF_API_KEY])
 
-    async def async_update_data(self) -> Dict[str, CloudingServer]:
+    async def async_update_data(self) -> dict[str, CloudingServer]:
         """..."""
         await self._async_update_data()
 
-    async def _async_update_data(self) -> Dict[str, CloudingServer]:
+    async def _async_update_data(self) -> dict[str, CloudingServer]:
         """Fetch the latest data from Clouding.io"""
 
         try:
-            servers: Dict[str, CloudingServer] = await self.api.get_servers()
+            servers: dict[str, CloudingServer] = await self.api.get_servers()
         except CloudingAuthenticationException as e:
             raise ConfigEntryAuthFailed(
                 translation_domain=DOMAIN,

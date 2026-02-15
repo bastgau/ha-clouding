@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List
 from zoneinfo import ZoneInfo
 
 from mashumaro import DataClassDictMixin
@@ -53,7 +52,7 @@ class CloudingServer(CloudingBaseModel):
     powerState: str
     privateIp: str | None = None
     publicIp: str
-    publicPorts: List[CloudingPublicPorts]
+    publicPorts: list[CloudingPublicPorts]
     ramGb: int
     status: str
     vCores: int

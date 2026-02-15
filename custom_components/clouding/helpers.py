@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from typing import List
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers import device_registry as dr
@@ -14,8 +13,8 @@ from .coordinator import CloudingConfigEntry
 def purge_entities(config_entry: CloudingConfigEntry, hass: HomeAssistant) -> None:
     """..."""
 
-    existing_servers: List[str] = [server_id.upper() for server_id in config_entry.runtime_data.data.keys()]
-    entities_to_remove: List[str] = []
+    existing_servers: list[str] = [server_id.upper() for server_id in config_entry.runtime_data.data.keys()]
+    entities_to_remove: list[str] = []
 
     config_entry_id: str = config_entry.runtime_data.config_entry.entry_id
     device_registry = dr.async_get(hass)

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.const import CONF_DEVICE_ID
@@ -59,7 +59,7 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
         f"Action '{action}' forn '{device.name}' from '{clouding_current_config_entry.title}' will be performed."
     )
 
-    mapping: Dict[str, str] = {
+    mapping: dict[str, str] = {
         "archive_server": "archive",
         "unarchive_server": "unarchive",
         "start_server": "start",
