@@ -1,17 +1,17 @@
-"""Python API wrapper for Clouding.io"""
+"""Python API wrapper for Clouding.io."""
 
 from http import HTTPStatus
-from typing import Any, Dict
+from typing import Any
 
 from aiohttp import ClientError, ClientResponse, ClientResponseError, ClientSession, ClientTimeout
 from yarl import URL
 
 from .const import CLOUDING_BASE_URL
 from .exceptions import (
-    CloudingAuthenticationException,
-    CloudingBadRequestException,
-    CloudingConnectionException,
-    CloudingInvalidAPIResponseException,
+    CloudingAuthenticationError,
+    CloudingBadRequestError,
+    CloudingConnectionError,
+    CloudingInvalidAPIResponseError,
 )
 from .models import CloudingServer
 
@@ -20,10 +20,10 @@ class Clouding:
     """Clouding.io client."""
 
     _base_url: str
-    _headers: Dict[str, str]
+    _headers: dict[str, str]
     _timeout: ClientTimeout
     _session: ClientSession
-    _servers: Dict[str, CloudingServer]
+    _servers: dict[str, CloudingServer]
 
     def __init__(self, session: ClientSession, api_key: str | None = None, timeout: float = 10) -> None:
         """Initialize the Clouding.io client."""
@@ -34,55 +34,61 @@ class Clouding:
         self._session = session
 
     @property
-    def servers(self) -> Dict[str, CloudingServer]:
+    def servers(self) -> dict[str, CloudingServer]:
         """..."""
         return self._servers
 
-    async def get_servers(self) -> Dict[str, CloudingServer]:
-        """Retrieve servers from Clouding.io"""
+    async def get_servers(self) -> dict[str, CloudingServer]:
+        """Retrieve servers from Clouding.io."""
 
         url = self._base_url / "servers"
-        request: ClientResponse = await self._call(url, headers=self._headers, timeout=self._timeout, method="get")
+        request: ClientResponse = await self._call(url, headers=self._headers, req_timeout=self._timeout, method="get")
         return await self._prepare_server_results(request)
 
-    async def call_action_server(self, action: str, id: str) -> None:
+    async def call_action_server(self, action: str, server_id: str) -> None:
         """..."""
 
-        url = self._base_url / "servers" / id / action
-        request: ClientResponse = await self._call(url, headers=self._headers, timeout=self._timeout, method="post")
+        url = self._base_url / "servers" / server_id / action
+        request: ClientResponse = await self._call(url, headers=self._headers, req_timeout=self._timeout, method="post")
         return request.json
 
-    async def _call(self, url, headers: Dict[str, Any], timeout: float, method: str) -> ClientResponse:
+    async def _call(self, url: str, headers: dict[str, Any], req_timeout: float, method: str) -> ClientResponse:
         """..."""
+
+        exception_msg: str = ""
 
         try:
             if method == "post":
-                request: ClientResponse = await self._session.post(url, headers=headers, timeout=timeout)
+                request: ClientResponse = await self._session.post(url, headers=headers, timeout=req_timeout)
             else:
-                request: ClientResponse = await self._session.get(url, headers=headers, timeout=timeout)
+                request: ClientResponse = await self._session.get(url, headers=headers, timeout=req_timeout)
             request.raise_for_status()
         except ClientResponseError as e:
             if e.status == HTTPStatus.UNAUTHORIZED:
-                raise CloudingAuthenticationException("Authentication failed for %s", str(url)) from e
+                exception_msg = f"Authentication failed for {url!s}"
+                raise CloudingAuthenticationError(exception_msg) from e
             if e.status == HTTPStatus.BAD_REQUEST:
-                raise CloudingBadRequestException("Bad request for %s", str(url)) from e
-            raise CloudingConnectionException("Request for %s failed with status code %s", str(url), e.status) from e
+                exception_msg = f"Bad request for {url!s}"
+                raise CloudingBadRequestError(exception_msg) from e
+            exception_msg = f"Request for {url!s} failed with status code {e.status}"
+            raise CloudingConnectionError(exception_msg) from e
         except TimeoutError as e:
-            raise CloudingConnectionException("Request timeout for %s", str(url)) from e
+            exception_msg = f"Request timeout for {url!s}"
+            raise CloudingConnectionError(exception_msg) from e
         except ClientError as e:
-            raise CloudingConnectionException from e
+            raise CloudingConnectionError from e
 
         return request
 
-    async def _prepare_server_results(self, request: ClientResponse) -> Dict[str, CloudingServer]:
+    async def _prepare_server_results(self, request: ClientResponse) -> dict[str, CloudingServer]:
         """..."""
 
-        results: Dict[str, Any] = await request.json()
+        results: dict[str, Any] = await request.json()
 
         if "servers" not in results:
-            raise CloudingInvalidAPIResponseException
+            raise CloudingInvalidAPIResponseError
 
-        dict_results: Dict[str, Any] = {result["id"]: result for result in results["servers"]}
+        dict_results: dict[str, Any] = {result["id"]: result for result in results["servers"]}
         self._servers = {key: CloudingServer.from_dict(value) for key, value in dict_results.items()}
 
         return self._servers

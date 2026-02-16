@@ -3,27 +3,28 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict
+from typing import TYPE_CHECKING, Any
 
 from homeassistant.config_entries import ConfigEntry, ConfigEntryState
 from homeassistant.const import CONF_DEVICE_ID
-from homeassistant.core import ServiceCall
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import device_registry as dr
 
-from custom_components.clouding.pythonclouding import (
-    CloudingBadRequestException,
+from .const import DOMAIN
+from .pythonclouding import (
+    CloudingBadRequestError,
 )
 
-from .const import DOMAIN
-from .coordinator import (
-    CloudingDataUpdateCoordinator,
-)
+if TYPE_CHECKING:
+    from homeassistant.core import ServiceCall
+
+    from .coordinator import CloudingDataUpdateCoordinator
+
 
 _LOGGER = logging.getLogger(__name__)
 
 
-async def _async_service(service_call: ServiceCall, data: Any, action: str) -> None:
+async def _async_service(service_call: ServiceCall, data: Any, action: str) -> None:  # noqa: ARG001 # pylint: disable=unused-argument
     """..."""
 
     device_id = service_call.data[CONF_DEVICE_ID]
@@ -54,12 +55,10 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
 
     coordinator: CloudingDataUpdateCoordinator = clouding_current_config_entry.runtime_data
 
-    # response = await coordinator.api.get_servers()
-    _LOGGER.debug(
-        f"Action '{action}' forn '{device.name}' from '{clouding_current_config_entry.title}' will be performed."
-    )
+    msg: str = f"Action '{action}' forn '{device.name}' from '{clouding_current_config_entry.title}' will be performed."
+    _LOGGER.debug(msg)
 
-    mapping: Dict[str, str] = {
+    mapping: dict[str, str] = {
         "archive_server": "archive",
         "unarchive_server": "unarchive",
         "start_server": "start",
@@ -70,15 +69,15 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
 
     try:
         await coordinator.api.call_action_server(mapping[action], device.serial_number)
-    except CloudingBadRequestException as _:
+    except CloudingBadRequestError as _:
         raise ServiceValidationError(
             translation_domain=DOMAIN,
             translation_key="action_cannot_be_performed",
             translation_placeholders={"action_name": mapping[action]},
-        )
+        ) from _
 
     await coordinator.async_update_data()
-    await coordinator._async_refresh()
+    await coordinator.async_refresh()
 
 
 async def async_archive_server(service_call: ServiceCall, data: Any) -> None:

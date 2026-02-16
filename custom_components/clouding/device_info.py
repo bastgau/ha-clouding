@@ -6,7 +6,7 @@ from homeassistant.util import slugify
 from .const import DOMAIN, MANUFACTURER_NAME, PORTAL_URL
 
 
-class CloudingDeviceInfo:
+class CloudingDeviceInfo:  # pylint: disable=too-few-public-methods
     """..."""
 
     _device_name: str
