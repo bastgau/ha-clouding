@@ -52,7 +52,7 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         await self._async_update_data()
 
     async def _async_update_data(self) -> dict[str, CloudingServer]:
-        """Fetch the latest data from Clouding.io"""
+        """Fetch the latest data from Clouding.io."""
 
         try:
             servers: dict[str, CloudingServer] = await self.api.get_servers()

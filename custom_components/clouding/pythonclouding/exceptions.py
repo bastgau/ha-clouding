@@ -1,4 +1,4 @@
-"""Python API wrapper for Clouding.io"""
+"""Python API wrapper for Clouding.io."""
 
 
 class CloudingException(Exception):

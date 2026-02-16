@@ -58,7 +58,7 @@ async def validate_connection(hass: HomeAssistant, api_key: str | None) -> dict[
 
 
 class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for Clouding.io"""
+    """Handle a config flow for Clouding.io."""
 
     _hassio_discovery: HassioServiceInfo | None = None
 
@@ -187,6 +187,7 @@ class OptionsFlowHandler(OptionsFlow):
     """Options flow used to change configuration (options) of existing instance of integration."""
 
     async def async_step_init(self, user_input=None) -> ConfigFlowResult:
+        """..."""
         if user_input is not None:  # we asked to validate values entered by user
             errors = await _async_validate_input(self.hass, user_input)
 

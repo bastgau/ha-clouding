@@ -73,7 +73,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
 
     # Register services to hass
     async def execute_service(call: ServiceCall) -> None:
-        """Execute a service to Clouding.io"""
+        """Execute a service to Clouding.io."""
 
         function_call = _SERVICE_MAP[call.service]
         await function_call(call, call.data)

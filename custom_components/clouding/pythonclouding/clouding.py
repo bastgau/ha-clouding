@@ -1,4 +1,4 @@
-"""Python API wrapper for Clouding.io"""
+"""Python API wrapper for Clouding.io."""
 
 from http import HTTPStatus
 from typing import Any
@@ -39,7 +39,7 @@ class Clouding:
         return self._servers
 
     async def get_servers(self) -> dict[str, CloudingServer]:
-        """Retrieve servers from Clouding.io"""
+        """Retrieve servers from Clouding.io."""
 
         url = self._base_url / "servers"
         request: ClientResponse = await self._call(url, headers=self._headers, timeout=self._timeout, method="get")
