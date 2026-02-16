@@ -1,21 +1,21 @@
 """Python API wrapper for Clouding.io."""
 
 
-class CloudingException(Exception):
+class CloudingError(Exception):
     """Base Clouding exception."""
 
 
-class CloudingAuthenticationException(CloudingException):
+class CloudingAuthenticationError(CloudingError):
     """Clouding authentication exception."""
 
 
-class CloudingBadRequestException(CloudingException):
+class CloudingBadRequestError(CloudingError):
     """Clouding bad request exception."""
 
 
-class CloudingConnectionException(CloudingException):
+class CloudingConnectionError(CloudingError):
     """Clouding connection exception."""
 
 
-class CloudingInvalidAPIResponseException(CloudingException):
+class CloudingInvalidAPIResponseError(CloudingError):
     """Clouding invalid API response exception."""

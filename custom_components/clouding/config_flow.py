@@ -2,25 +2,28 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from custom_components.clouding.pythonclouding import (
-    Clouding,
-    CloudingAuthenticationException,
-    CloudingException,
-)
 import voluptuous as vol
 
-from homeassistant.config_entries import ConfigFlow, ConfigFlowResult, OptionsFlow
+from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.const import CONF_API_KEY, CONF_NAME
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers import selector
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.service_info.hassio import HassioServiceInfo
 
 from .const import CONF_UPDATE_INTERVAL, DOMAIN, MIN_TIME_BETWEEN_UPDATES
+from .pythonclouding import (
+    Clouding,
+    CloudingAuthenticationError,
+    CloudingError,
+)
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
+
+    from homeassistant.helpers.service_info.hassio import HassioServiceInfo
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -47,11 +50,11 @@ async def validate_connection(hass: HomeAssistant, api_key: str | None) -> dict[
 
     try:
         await clouding.get_servers()
-    except CloudingAuthenticationException:
+    except CloudingAuthenticationError:
         errors["base"] = "invalid_auth"
-    except CloudingException:
+    except CloudingError:
         errors["base"] = "cannot_connect"
-    except Exception:
+    except Exception:  # pylint: disable=broad-exception-caught
         _LOGGER.exception("Unexpected exception")
         errors["base"] = "unknown"
     return errors
@@ -87,7 +90,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_reauth(self, entry_data: Mapping[str, Any]) -> ConfigFlowResult:
+    async def async_step_reauth(self, entry_data: Mapping[str, Any]) -> ConfigFlowResult:  # pylint: disable=unused-argument
         """Perform reauth upon an API authentication error."""
         return await self.async_step_reauth_confirm()
 
@@ -97,17 +100,16 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
 
         entry = self._get_reauth_entry()
 
-        if user_input is not None:
-            if not (
-                errors := await validate_connection(
-                    self.hass,
-                    user_input[CONF_API_KEY],
-                )
-            ):
-                return self.async_update_reload_and_abort(
-                    entry,
-                    data_updates=user_input,
-                )
+        if user_input is not None and not (
+            errors := await validate_connection(
+                self.hass,
+                user_input[CONF_API_KEY],
+            )
+        ):
+            return self.async_update_reload_and_abort(
+                entry,
+                data_updates=user_input,
+            )
 
         return self.async_show_form(
             step_id="reauth_confirm",
@@ -148,13 +150,13 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
 
     @staticmethod
     @callback
-    def async_get_options_flow(config_entry):
+    def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlowHandler:  # noqa: ARG004 # pylint: disable=unused-argument
         """Get the options flow for this handler."""
         return OptionsFlowHandler()
 
 
 async def _async_validate_input(
-    hass: HomeAssistant,
+    hass: HomeAssistant,  # noqa: ARG001 # pylint: disable=unused-argument
     user_input: dict[str, Any],
 ) -> Any:
     if user_input[CONF_UPDATE_INTERVAL] == 1:
@@ -163,7 +165,7 @@ async def _async_validate_input(
     return {}
 
 
-def _get_data_option_schema(user_input) -> vol.Schema:
+def _get_data_option_schema() -> vol.Schema:
     return vol.Schema(
         {
             vol.Required(
@@ -186,7 +188,7 @@ def _get_data_option_schema(user_input) -> vol.Schema:
 class OptionsFlowHandler(OptionsFlow):
     """Options flow used to change configuration (options) of existing instance of integration."""
 
-    async def async_step_init(self, user_input=None) -> ConfigFlowResult:
+    async def async_step_init(self, user_input=None) -> ConfigFlowResult:  # pylint: disable=unused-argument  # noqa: ANN001
         """..."""
         if user_input is not None:  # we asked to validate values entered by user
             errors = await _async_validate_input(self.hass, user_input)
@@ -199,7 +201,7 @@ class OptionsFlowHandler(OptionsFlow):
             return self.async_show_form(
                 step_id="init",
                 data_schema=self.add_suggested_values_to_schema(
-                    _get_data_option_schema(user_input),
+                    _get_data_option_schema(),
                     user_input,
                 ),
                 errors=dict(errors),
@@ -220,7 +222,7 @@ class OptionsFlowHandler(OptionsFlow):
         return self.async_show_form(
             step_id="init",
             data_schema=self.add_suggested_values_to_schema(
-                _get_data_option_schema(user_input),
+                _get_data_option_schema(),
                 self.config_entry.data,
             ),
         )

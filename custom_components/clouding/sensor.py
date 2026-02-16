@@ -4,8 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import StrEnum
-
-from custom_components.clouding.pythonclouding import CloudingServer
+from typing import TYPE_CHECKING
 
 from homeassistant.components.sensor import (
     DOMAIN as SENSOR_DOMAIN,
@@ -15,13 +14,16 @@ from homeassistant.components.sensor import (
 )
 from homeassistant.const import CONF_NAME, UnitOfInformation
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
 
 from .const import ATTRIBUTION
 from .coordinator import CloudingConfigEntry, CloudingDataUpdateCoordinator
 from .device_info import CloudingDeviceInfo
+
+if TYPE_CHECKING:
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+    from pythonclouding import CloudingServer
 
 PARALLEL_UPDATES = 0
 
@@ -84,11 +86,6 @@ SENSOR_ATTRIBUTES: tuple[SensorEntityDescription, ...] = (
         translation_key=EnumCloudingSensor.SERVER_NAME,
         name_suffix="Name",
     ),
-    # CloudingSensorEntityDescription(
-    #     key=EnumCloudingSensor.SERVER_POWER_STATE,
-    #     translation_key=EnumCloudingSensor.SERVER_POWER_STATE,
-    #     name_suffix="Power State",
-    # ),
     CloudingSensorEntityDescription(
         key=EnumCloudingSensor.SERVER_PUBLIC_IP,
         translation_key=EnumCloudingSensor.SERVER_PUBLIC_IP,
@@ -117,7 +114,7 @@ SENSOR_ATTRIBUTES: tuple[SensorEntityDescription, ...] = (
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
+    hass: HomeAssistant,  # noqa: ARG001 # pylint: disable=unused-argument
     config_entry: CloudingConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
@@ -135,7 +132,7 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEntity, CloudingDeviceInfo):
+class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEntity, CloudingDeviceInfo):  # pylint: disable=too-many-instance-attributes
     """A Clouding.io sensor."""
 
     _attr_attribution = ATTRIBUTION
@@ -144,7 +141,7 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
     def __init__(
         self,
         coordinator: CloudingDataUpdateCoordinator,
-        server_id,
+        server_id: str,
         description: CloudingSensorEntityDescription,
         device_name: str,
     ) -> None:

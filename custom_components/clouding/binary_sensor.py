@@ -4,8 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import StrEnum
-
-from custom_components.clouding.pythonclouding import CloudingServer
+from typing import TYPE_CHECKING
 
 from homeassistant.components.binary_sensor import (
     DOMAIN as BINARY_SENSOR_DOMAIN,
@@ -15,13 +14,16 @@ from homeassistant.components.binary_sensor import (
 )
 from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import dt as dt_util, slugify
 
 from .const import ATTRIBUTION
 from .coordinator import CloudingConfigEntry, CloudingDataUpdateCoordinator
 from .device_info import CloudingDeviceInfo
+
+if TYPE_CHECKING:
+    from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
+    from pythonclouding import CloudingServer
 
 PARALLEL_UPDATES = 0
 
@@ -49,7 +51,7 @@ BINARY_SENSOR_ATTRIBUTES: tuple[BinarySensorEntityDescription, ...] = (
 )
 
 
-class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], BinarySensorEntity):
+class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], BinarySensorEntity):  # pylint: disable=too-many-instance-attributes
     """A Clouding.io binary sensor."""
 
     _attr_attribution = ATTRIBUTION
@@ -58,7 +60,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
     def __init__(
         self,
         coordinator: CloudingDataUpdateCoordinator,
-        server_id,
+        server_id: str,
         description: CloudingBinarySensorEntityDescription,
         device_name: str,
     ) -> None:
@@ -124,7 +126,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
 
 
 async def async_setup_entry(
-    hass: HomeAssistant,
+    hass: HomeAssistant,  # noqa: ARG001 # pylint: disable=unused-argument
     config_entry: CloudingConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:

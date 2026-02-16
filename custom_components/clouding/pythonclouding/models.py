@@ -1,9 +1,12 @@
 """Python API wrapper for Clouding.io."""
 
+# ruff: noqa: N815
+# pylint: disable=invalid-name
+
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime  # noqa: TC003
 from zoneinfo import ZoneInfo
 
 from mashumaro import DataClassDictMixin
@@ -42,7 +45,7 @@ class CloudingPublicPorts(CloudingBaseModel):
 
 
 @dataclass(kw_only=True)
-class CloudingServer(CloudingBaseModel):
+class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-attributes
     """Server model for Clouding.io."""
 
     createdAt: datetime

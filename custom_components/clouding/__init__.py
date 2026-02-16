@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from datetime import timedelta
 import logging
+from typing import TYPE_CHECKING
 
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant, ServiceCall
 
 from .const import (
     CONF_UPDATE_INTERVAL,
@@ -32,6 +32,9 @@ from .services import (
     async_stop_server,
     async_unarchive_server,
 )
+
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant, ServiceCall
 
 PLATFORMS: list[Platform] = [
     Platform.BINARY_SENSOR,
