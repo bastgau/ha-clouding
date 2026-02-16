@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import logging
 from datetime import timedelta
-from typing import List
+import logging
+from typing import TYPE_CHECKING
 
 from homeassistant.const import Platform
-from homeassistant.core import HomeAssistant, ServiceCall
 
 from .const import (
     CONF_UPDATE_INTERVAL,
@@ -34,7 +33,13 @@ from .services import (
     async_unarchive_server,
 )
 
-PLATFORMS: List[Platform] = [Platform.SENSOR, Platform.BINARY_SENSOR]
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant, ServiceCall
+
+PLATFORMS: list[Platform] = [
+    Platform.BINARY_SENSOR,
+    Platform.SENSOR,
+]
 
 _SERVICE_MAP = {
     SERVICE_ARCHIVE_SERVER: async_archive_server,
@@ -71,7 +76,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
 
     # Register services to hass
     async def execute_service(call: ServiceCall) -> None:
-        """Execute a service to Clouding.io"""
+        """Execute a service to Clouding.io."""
 
         function_call = _SERVICE_MAP[call.service]
         await function_call(call, call.data)

@@ -1,2 +1,9 @@
+<<<<<<< HEAD
 homeassistant==2026.2.0
 ruff==0.14.14
+=======
+homeassistant==2026.2.2
+ruff==0.15.1
+prek==0.2.28
+pylint==4.0.4
+>>>>>>> 320508f (fix: linter issues to respect Home Assistant guidelines)
