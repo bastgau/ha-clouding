@@ -1,10 +1,17 @@
-"""Python API wrapper for Clouding.io"""
+"""Python API wrapper for Clouding.io."""
 
-from .clouding import Clouding  # noqa
-from .models import CloudingServer  # noqa
+__all__ = [
+    "Clouding",
+    "CloudingAuthenticationError",
+    "CloudingBadRequestError",
+    "CloudingError",
+    "CloudingServer",
+]
 
+from .clouding import Clouding
 from .exceptions import (
-    CloudingException,  # noqa
-    CloudingAuthenticationException,  # noqa
-    CloudingBadRequestException,  # noqa
+    CloudingAuthenticationError,
+    CloudingBadRequestError,
+    CloudingError,
 )
+from .models import CloudingServer

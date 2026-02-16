@@ -2,25 +2,26 @@
 
 from __future__ import annotations
 
-import logging
 from datetime import timedelta
-from typing import Any, Dict
+import logging
+from typing import TYPE_CHECKING, Any
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_API_KEY
-from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from custom_components.clouding.pythonclouding import (
+from .const import DOMAIN
+from .pythonclouding import (
     Clouding,
-    CloudingAuthenticationException,
-    CloudingException,
+    CloudingAuthenticationError,
+    CloudingError,
     CloudingServer,
 )
 
-from .const import DOMAIN
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -29,7 +30,7 @@ SCAN_INTERVAL_UPDATES = timedelta(hours=3)
 type CloudingConfigEntry = ConfigEntry[CloudingDataUpdateCoordinator]
 
 
-class CloudingDataUpdateCoordinator(DataUpdateCoordinator[Dict[str, Any]]):
+class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     """Update coordinator for Clouding."""
 
     config_entry: CloudingConfigEntry
@@ -47,21 +48,21 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[Dict[str, Any]]):
         session = async_get_clientsession(hass)
         self.api = Clouding(session, config_entry.data[CONF_API_KEY])
 
-    async def async_update_data(self) -> Dict[str, CloudingServer]:
+    async def async_update_data(self) -> dict[str, CloudingServer]:
         """..."""
         await self._async_update_data()
 
-    async def _async_update_data(self) -> Dict[str, CloudingServer]:
-        """Fetch the latest data from Clouding.io"""
+    async def _async_update_data(self) -> dict[str, CloudingServer]:
+        """Fetch the latest data from Clouding.io."""
 
         try:
-            servers: Dict[str, CloudingServer] = await self.api.get_servers()
-        except CloudingAuthenticationException as e:
+            servers: dict[str, CloudingServer] = await self.api.get_servers()
+        except CloudingAuthenticationError as e:
             raise ConfigEntryAuthFailed(
                 translation_domain=DOMAIN,
                 translation_key="auth_failed_exception",
             ) from e
-        except CloudingException as e:
+        except CloudingError as e:
             raise UpdateFailed(
                 translation_domain=DOMAIN,
                 translation_key="request_failed_exception",
