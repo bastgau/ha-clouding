@@ -2,23 +2,23 @@
 
 from __future__ import annotations
 
-import logging
 from collections.abc import Mapping
+import logging
 from typing import Any
-
-import voluptuous as vol
-from homeassistant.config_entries import ConfigFlow, ConfigFlowResult, OptionsFlow
-from homeassistant.const import CONF_API_KEY, CONF_NAME
-from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers import selector
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.service_info.hassio import HassioServiceInfo
 
 from custom_components.clouding.pythonclouding import (
     Clouding,
     CloudingAuthenticationException,
     CloudingException,
 )
+import voluptuous as vol
+
+from homeassistant.config_entries import ConfigFlow, ConfigFlowResult, OptionsFlow
+from homeassistant.const import CONF_API_KEY, CONF_NAME
+from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers import selector
+from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.service_info.hassio import HassioServiceInfo
 
 from .const import CONF_UPDATE_INTERVAL, DOMAIN, MIN_TIME_BETWEEN_UPDATES
 
@@ -195,15 +195,14 @@ class OptionsFlowHandler(OptionsFlow):
                     self.config_entry, data={**self.config_entry.data, **user_input}
                 )
                 return self.async_create_entry(title="", data={})
-            else:
-                return self.async_show_form(
-                    step_id="init",
-                    data_schema=self.add_suggested_values_to_schema(
-                        _get_data_option_schema(user_input),
-                        user_input,
-                    ),
-                    errors=dict(errors),
-                )
+            return self.async_show_form(
+                step_id="init",
+                data_schema=self.add_suggested_values_to_schema(
+                    _get_data_option_schema(user_input),
+                    user_input,
+                ),
+                errors=dict(errors),
+            )
 
         update_interval = self.config_entry.data.get(CONF_UPDATE_INTERVAL, None)
 
@@ -212,7 +211,7 @@ class OptionsFlowHandler(OptionsFlow):
                 self.config_entry,
                 data={
                     **self.config_entry.data,
-                    **{CONF_UPDATE_INTERVAL: MIN_TIME_BETWEEN_UPDATES.seconds},
+                    CONF_UPDATE_INTERVAL: MIN_TIME_BETWEEN_UPDATES.seconds,
                 },
             )
 

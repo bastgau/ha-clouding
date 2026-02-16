@@ -65,15 +65,15 @@ class Clouding:
             request.raise_for_status()
         except ClientResponseError as e:
             if e.status == HTTPStatus.UNAUTHORIZED:
-                exception_msg = f"Authentication failed for {str(url)}"
+                exception_msg = f"Authentication failed for {url!s}"
                 raise CloudingAuthenticationException(exception_msg) from e
             if e.status == HTTPStatus.BAD_REQUEST:
-                exception_msg = f"Bad request for {str(url)}"
+                exception_msg = f"Bad request for {url!s}"
                 raise CloudingBadRequestException(exception_msg) from e
-            exception_msg = f"Request for {str(url)} failed with status code {e.status}"
+            exception_msg = f"Request for {url!s} failed with status code {e.status}"
             raise CloudingConnectionException(exception_msg) from e
         except TimeoutError as e:
-            exception_msg = f"Request timeout for {str(url)}"
+            exception_msg = f"Request timeout for {url!s}"
             raise CloudingConnectionException(exception_msg) from e
         except ClientError as e:
             raise CloudingConnectionException from e

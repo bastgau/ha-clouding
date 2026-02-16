@@ -5,8 +5,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import StrEnum
 
-from homeassistant.components.binary_sensor import DOMAIN as BINARY_SENSOR_DOMAIN
+from custom_components.clouding.pythonclouding import CloudingServer
+
 from homeassistant.components.binary_sensor import (
+    DOMAIN as BINARY_SENSOR_DOMAIN,
     BinarySensorDeviceClass,
     BinarySensorEntity,
     BinarySensorEntityDescription,
@@ -15,10 +17,7 @@ from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.util import dt as dt_util
-from homeassistant.util import slugify
-
-from custom_components.clouding.pythonclouding import CloudingServer
+from homeassistant.util import dt as dt_util, slugify
 
 from .const import ATTRIBUTION
 from .coordinator import CloudingConfigEntry, CloudingDataUpdateCoordinator
@@ -112,7 +111,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
         try:
             if self.entity_description.key == EnumCloudingBinarySensor.SERVER_RUNNING:
                 self._attr_extra_state_attributes = {
-                    "Value": getattr(self.coordinator.api.servers[self._server_unique_id], "attr_power_state"),
+                    "Value": self.coordinator.api.servers[self._server_unique_id].attr_power_state,
                     "Last Refresh": dt_util.utcnow(),
                 }
 

@@ -5,8 +5,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import StrEnum
 
-from homeassistant.components.sensor import DOMAIN as SENSOR_DOMAIN
+from custom_components.clouding.pythonclouding import CloudingServer
+
 from homeassistant.components.sensor import (
+    DOMAIN as SENSOR_DOMAIN,
     SensorDeviceClass,
     SensorEntity,
     SensorEntityDescription,
@@ -16,8 +18,6 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from homeassistant.util import slugify
-
-from custom_components.clouding.pythonclouding import CloudingServer
 
 from .const import ATTRIBUTION
 from .coordinator import CloudingConfigEntry, CloudingDataUpdateCoordinator

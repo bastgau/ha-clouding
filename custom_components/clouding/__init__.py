@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-import logging
 from datetime import timedelta
+import logging
 
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, ServiceCall
