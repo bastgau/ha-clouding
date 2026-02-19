@@ -54,6 +54,7 @@ class Clouding:
             CloudingBadRequestError: If the request is malformed.
             CloudingConnectionError: If the request fails or times out.
             CloudingInvalidAPIResponseError: If the response does not contain a 'servers' key.
+
         """
 
         url = self._base_url / "servers"
