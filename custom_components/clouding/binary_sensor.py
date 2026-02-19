@@ -1,4 +1,4 @@
-"""Sensor platform for the Clouding.io integration."""
+"""Binary sensor platform for the Clouding.io integration."""
 
 from __future__ import annotations
 
