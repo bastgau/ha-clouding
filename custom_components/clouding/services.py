@@ -69,7 +69,7 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
 
     coordinator: CloudingDataUpdateCoordinator = clouding_current_config_entry.runtime_data
 
-    msg: str = f"Action '{action}' forn '{device.name}' from '{clouding_current_config_entry.title}' will be performed."
+    msg: str = f"Action '{action}' for '{device.name}' from '{clouding_current_config_entry.title}' will be performed."
     _LOGGER.debug(msg)
 
     mapping: dict[str, str] = {
