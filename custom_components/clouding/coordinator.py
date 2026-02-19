@@ -25,8 +25,6 @@ if TYPE_CHECKING:
 
 _LOGGER = logging.getLogger(__name__)
 
-SCAN_INTERVAL_UPDATES = timedelta(hours=3)
-
 type CloudingConfigEntry = ConfigEntry[CloudingDataUpdateCoordinator]
 
 
