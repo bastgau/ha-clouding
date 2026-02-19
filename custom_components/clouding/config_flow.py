@@ -1,4 +1,4 @@
-"""Config flow for the Clouding.io integration."""
+"""Config flow for the .io integration."""
 
 from __future__ import annotations
 
@@ -42,7 +42,7 @@ STEP_REAUTH_DATA_SCHEMA = vol.Schema(
 
 
 async def validate_connection(hass: HomeAssistant, api_key: str | None) -> dict[str, str]:
-    """Validate the Clouding.io API connectivity using the provided API key.
+    """Validate Clouding.io connectivity.
 
     Args:
         hass: The Home Assistant instance.
@@ -74,7 +74,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
     _hassio_discovery: HassioServiceInfo | None = None
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """Handle the initial step of the config flow.
+        """Handle the initial step.
 
         Args:
             user_input: Data submitted by the user, or None on first display.
@@ -187,7 +187,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlowHandler:  # noqa: ARG004 # pylint: disable=unused-argument
-        """Get the options flow handler for this config entry.
+        """Get the options flow for this handler.
 
         Args:
             config_entry: The current config entry (unused).
@@ -201,7 +201,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
 async def _async_validate_input(
     hass: HomeAssistant,  # noqa: ARG001 # pylint: disable=unused-argument
     user_input: dict[str, Any],
-) -> dict[str, str]:
+) -> Any:
     """Validate the options form input.
 
     Args:
