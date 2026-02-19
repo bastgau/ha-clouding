@@ -38,6 +38,7 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
     Raises:
         ServiceValidationError: If the device ID is invalid, the config entry is not
             loaded, no valid config entry is found, or the action cannot be performed.
+
     """
 
     device_id = service_call.data[CONF_DEVICE_ID]
@@ -99,6 +100,7 @@ async def async_archive_server(service_call: ServiceCall, data: Any) -> None:
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
     """
     await _async_service(service_call, data, "archive_server")
 
@@ -109,6 +111,7 @@ async def async_unarchive_server(service_call: ServiceCall, data: Any) -> None:
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
     """
     await _async_service(service_call, data, "unarchive_server")
 
@@ -119,6 +122,7 @@ async def async_hard_reboot_server(service_call: ServiceCall, data: Any) -> None
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
     """
     await _async_service(service_call, data, "hard_reboot_server")
 
@@ -129,6 +133,7 @@ async def async_reboot_server(service_call: ServiceCall, data: Any) -> None:
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
     """
     await _async_service(service_call, data, "reboot_server")
 
@@ -139,6 +144,7 @@ async def async_start_server(service_call: ServiceCall, data: Any) -> None:
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
     """
     await _async_service(service_call, data, "start_server")
 
@@ -149,5 +155,6 @@ async def async_stop_server(service_call: ServiceCall, data: Any) -> None:
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
     """
     await _async_service(service_call, data, "stop_server")

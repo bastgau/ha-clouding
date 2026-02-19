@@ -39,6 +39,7 @@ class Clouding:
 
         Returns:
             A dictionary mapping server IDs to their CloudingServer instances.
+
         """
         return self._servers
 
@@ -63,6 +64,7 @@ class Clouding:
             CloudingAuthenticationError: If authentication fails.
             CloudingBadRequestError: If the action is not valid for the current server state.
             CloudingConnectionError: If the request fails or times out.
+
         """
 
         url = self._base_url / "servers" / server_id / action
@@ -85,6 +87,7 @@ class Clouding:
             CloudingAuthenticationError: If the response status is 401 Unauthorized.
             CloudingBadRequestError: If the response status is 400 Bad Request.
             CloudingConnectionError: If the request fails, times out, or returns another error status.
+
         """
 
         exception_msg: str = ""
@@ -123,6 +126,7 @@ class Clouding:
 
         Raises:
             CloudingInvalidAPIResponseError: If the response does not contain a 'servers' key.
+
         """
 
         results: dict[str, Any] = await request.json()
