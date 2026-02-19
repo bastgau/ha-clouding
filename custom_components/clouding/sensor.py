@@ -187,13 +187,15 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
             )
 
             if self.entity_description.key == EnumCloudingSensor.SERVER_STATUS:
-                if self._attr_native_value.lower() == "archived":
+                value: str = self._attr_native_value.lower()
+
+                if value == "archived":
                     self._attr_icon = "mdi:archive-check-outline"
-                elif self._attr_native_value.lower() in ["unarchiving", "archiving"]:
+                elif value in ["unarchiving", "archiving"]:
                     self._attr_icon = "mdi:archive-clock-outline"
-                elif self._attr_native_value.lower() == "stopped":
+                elif value == "stopped":
                     self._attr_icon = "mdi:close-circle-outline"
-                elif self._attr_native_value.lower() in ["starting", "stopping"]:
+                elif value in ["starting", "stopping"]:
                     self._attr_icon = "mdi:refresh-circle"
                 else:
                     self._attr_icon = "mdi:check-circle-outline"
