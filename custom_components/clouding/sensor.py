@@ -41,8 +41,8 @@ class EnumCloudingSensor(StrEnum):
     SERVER_POWER_STATE: str = "power_state"
     SERVER_PUBLIC_IP: str = "public_ip"
     SERVER_STATUS: str = "status"
-    SERVER_VCORES: int = "vcores"
-    SERVER_VOLUME_SIZE_GB: int = "volume_size_gb"
+    SERVER_VCORES: str = "vcores"
+    SERVER_VOLUME_SIZE_GB: str = "volume_size_gb"
 
 
 @dataclass(frozen=True, kw_only=True)
