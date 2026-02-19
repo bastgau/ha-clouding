@@ -23,6 +23,15 @@ if TYPE_CHECKING:
 
 _LOGGER = logging.getLogger(__name__)
 
+MAPPING_SERVICE_ACTION: dict[str, str] = {
+    "archive_server": "archive",
+    "unarchive_server": "unarchive",
+    "start_server": "start",
+    "stop_server": "stop",
+    "reboot_server": "reboot",
+    "hard_reboot_server": "hard-reboot",
+}
+
 
 async def _async_service(service_call: ServiceCall, data: Any, action: str) -> None:  # noqa: ARG001 # pylint: disable=unused-argument
     """Dispatch a service action to the Clouding.io API for the target device.
@@ -72,22 +81,13 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
     msg: str = f"Action '{action}' for '{device.name}' from '{clouding_current_config_entry.title}' will be performed."
     _LOGGER.debug(msg)
 
-    mapping: dict[str, str] = {
-        "archive_server": "archive",
-        "unarchive_server": "unarchive",
-        "start_server": "start",
-        "stop_server": "stop",
-        "reboot_server": "reboot",
-        "hard_reboot_server": "hard-reboot",
-    }
-
     try:
-        await coordinator.api.call_action_server(mapping[action], device.serial_number)
+        await coordinator.api.call_action_server(MAPPING_SERVICE_ACTION[action], device.serial_number)
     except CloudingBadRequestError as _:
         raise ServiceValidationError(
             translation_domain=DOMAIN,
             translation_key="action_cannot_be_performed",
-            translation_placeholders={"action_name": mapping[action]},
+            translation_placeholders={"action_name": MAPPING_SERVICE_ACTION[action]},
         ) from _
 
     await coordinator.async_update_data()
