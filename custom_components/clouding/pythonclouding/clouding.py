@@ -35,7 +35,11 @@ class Clouding:
 
     @property
     def servers(self) -> dict[str, CloudingServer]:
-        """..."""
+        """Return the cached dictionary of CloudingServer instances.
+
+        Returns:
+            A dictionary mapping server IDs to their CloudingServer instances.
+        """
         return self._servers
 
     async def get_servers(self) -> dict[str, CloudingServer]:
@@ -46,14 +50,42 @@ class Clouding:
         return await self._prepare_server_results(request)
 
     async def call_action_server(self, action: str, server_id: str) -> None:
-        """..."""
+        """Send an action request to a specific Clouding.io server.
+
+        Args:
+            action: The action to perform (e.g. 'start', 'stop', 'reboot', 'hard-reboot').
+            server_id: The unique identifier of the target server.
+
+        Returns:
+            The JSON response from the API.
+
+        Raises:
+            CloudingAuthenticationError: If authentication fails.
+            CloudingBadRequestError: If the action is not valid for the current server state.
+            CloudingConnectionError: If the request fails or times out.
+        """
 
         url = self._base_url / "servers" / server_id / action
         request: ClientResponse = await self._call(url, headers=self._headers, req_timeout=self._timeout, method="post")
         return request.json
 
     async def _call(self, url: str, headers: dict[str, Any], req_timeout: float, method: str) -> ClientResponse:
-        """..."""
+        """Perform an HTTP request to the Clouding.io API.
+
+        Args:
+            url: The target URL for the request.
+            headers: HTTP headers to include in the request.
+            req_timeout: Timeout in seconds for the request.
+            method: HTTP method to use ('get' or 'post').
+
+        Returns:
+            The aiohttp ClientResponse object.
+
+        Raises:
+            CloudingAuthenticationError: If the response status is 401 Unauthorized.
+            CloudingBadRequestError: If the response status is 400 Bad Request.
+            CloudingConnectionError: If the request fails, times out, or returns another error status.
+        """
 
         exception_msg: str = ""
 
@@ -81,7 +113,17 @@ class Clouding:
         return request
 
     async def _prepare_server_results(self, request: ClientResponse) -> dict[str, CloudingServer]:
-        """..."""
+        """Parse the API response and populate the internal servers dictionary.
+
+        Args:
+            request: The aiohttp ClientResponse from the servers endpoint.
+
+        Returns:
+            A dictionary mapping server IDs to their CloudingServer instances.
+
+        Raises:
+            CloudingInvalidAPIResponseError: If the response does not contain a 'servers' key.
+        """
 
         results: dict[str, Any] = await request.json()
 

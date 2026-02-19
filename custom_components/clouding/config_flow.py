@@ -189,7 +189,17 @@ class OptionsFlowHandler(OptionsFlow):
     """Options flow used to change configuration (options) of existing instance of integration."""
 
     async def async_step_init(self, user_input=None) -> ConfigFlowResult:  # pylint: disable=unused-argument  # noqa: ANN001
-        """..."""
+        """Handle the options flow initialization step.
+
+        Validates user input if provided, updates the config entry, and returns
+        the options form with the current values pre-filled.
+
+        Args:
+            user_input: Form data submitted by the user, or None on first load.
+
+        Returns:
+            A ConfigFlowResult either creating the entry or showing the form.
+        """
         if user_input is not None:  # we asked to validate values entered by user
             errors = await _async_validate_input(self.hass, user_input)
 
