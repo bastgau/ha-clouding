@@ -25,8 +25,6 @@ if TYPE_CHECKING:
 
 _LOGGER = logging.getLogger(__name__)
 
-SCAN_INTERVAL_UPDATES = timedelta(hours=3)
-
 type CloudingConfigEntry = ConfigEntry[CloudingDataUpdateCoordinator]
 
 
@@ -42,6 +40,7 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             hass: The Home Assistant instance.
             config_entry: The config entry associated with this coordinator.
             update_interval: The interval in seconds between data updates.
+
         """
 
         super().__init__(
@@ -63,8 +62,9 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         Raises:
             ConfigEntryAuthFailed: If the API key is invalid or authentication fails.
             UpdateFailed: If the API request fails for any other reason.
+
         """
-        await self._async_update_data()
+        return await self._async_update_data()
 
     async def _async_update_data(self) -> dict[str, CloudingServer]:
         """Fetch the latest data from Clouding.io.
@@ -75,6 +75,7 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         Raises:
             ConfigEntryAuthFailed: If the API key is invalid or authentication fails.
             UpdateFailed: If the API request fails for any other reason.
+
         """
 
         try:

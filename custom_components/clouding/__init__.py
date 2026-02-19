@@ -23,7 +23,6 @@ from .coordinator import (
     CloudingConfigEntry,
     CloudingDataUpdateCoordinator,
 )
-from .helpers import purge_entities
 from .services import (
     async_archive_server,
     async_hard_reboot_server,
@@ -84,7 +83,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
     for service in _SERVICE_MAP:
         hass.services.async_register(DOMAIN, service, execute_service)
 
-    # purge_entities(config_entry, hass)
+    # add call of the function purge_entities(config_entry, hass)
 
     return True
 

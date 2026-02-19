@@ -23,6 +23,15 @@ if TYPE_CHECKING:
 
 _LOGGER = logging.getLogger(__name__)
 
+MAPPING_SERVICE_ACTION: dict[str, str] = {
+    "archive_server": "archive",
+    "unarchive_server": "unarchive",
+    "start_server": "start",
+    "stop_server": "stop",
+    "reboot_server": "reboot",
+    "hard_reboot_server": "hard-reboot",
+}
+
 
 async def _async_service(service_call: ServiceCall, data: Any, action: str) -> None:  # noqa: ARG001 # pylint: disable=unused-argument
     """Dispatch a service action to the Clouding.io API for the target device.
@@ -38,6 +47,7 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
     Raises:
         ServiceValidationError: If the device ID is invalid, the config entry is not
             loaded, no valid config entry is found, or the action cannot be performed.
+
     """
 
     device_id = service_call.data[CONF_DEVICE_ID]
@@ -68,25 +78,16 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
 
     coordinator: CloudingDataUpdateCoordinator = clouding_current_config_entry.runtime_data
 
-    msg: str = f"Action '{action}' forn '{device.name}' from '{clouding_current_config_entry.title}' will be performed."
+    msg: str = f"Action '{action}' for '{device.name}' from '{clouding_current_config_entry.title}' will be performed."
     _LOGGER.debug(msg)
 
-    mapping: dict[str, str] = {
-        "archive_server": "archive",
-        "unarchive_server": "unarchive",
-        "start_server": "start",
-        "stop_server": "stop",
-        "reboot_server": "reboot",
-        "hard_reboot_server": "hard-reboot",
-    }
-
     try:
-        await coordinator.api.call_action_server(mapping[action], device.serial_number)
+        await coordinator.api.call_action_server(MAPPING_SERVICE_ACTION[action], device.serial_number)
     except CloudingBadRequestError as _:
         raise ServiceValidationError(
             translation_domain=DOMAIN,
             translation_key="action_cannot_be_performed",
-            translation_placeholders={"action_name": mapping[action]},
+            translation_placeholders={"action_name": MAPPING_SERVICE_ACTION[action]},
         ) from _
 
     await coordinator.async_update_data()
@@ -99,6 +100,7 @@ async def async_archive_server(service_call: ServiceCall, data: Any) -> None:
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
     """
     await _async_service(service_call, data, "archive_server")
 
@@ -109,6 +111,7 @@ async def async_unarchive_server(service_call: ServiceCall, data: Any) -> None:
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
     """
     await _async_service(service_call, data, "unarchive_server")
 
@@ -119,6 +122,7 @@ async def async_hard_reboot_server(service_call: ServiceCall, data: Any) -> None
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
     """
     await _async_service(service_call, data, "hard_reboot_server")
 
@@ -129,6 +133,7 @@ async def async_reboot_server(service_call: ServiceCall, data: Any) -> None:
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
     """
     await _async_service(service_call, data, "reboot_server")
 
@@ -139,6 +144,7 @@ async def async_start_server(service_call: ServiceCall, data: Any) -> None:
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
     """
     await _async_service(service_call, data, "start_server")
 
@@ -149,5 +155,6 @@ async def async_stop_server(service_call: ServiceCall, data: Any) -> None:
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
     """
     await _async_service(service_call, data, "stop_server")

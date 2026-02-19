@@ -14,6 +14,7 @@ class CloudingDeviceInfo:  # pylint: disable=too-few-public-methods
         _model_name: The server image/model name.
         _server_name: The display name of the server.
         _server_unique_id: The unique identifier of the server.
+
     """
 
     _device_name: str
@@ -29,6 +30,7 @@ class CloudingDeviceInfo:  # pylint: disable=too-few-public-methods
             model_name: The server image/model name.
             server_name: The display name of the server.
             server_unique_id: The unique identifier of the server.
+
         """
 
         self._device_name = device_name
@@ -42,6 +44,7 @@ class CloudingDeviceInfo:  # pylint: disable=too-few-public-methods
 
         Returns:
             A DeviceInfo instance populated with Clouding.io server metadata.
+
         """
 
         return DeviceInfo(

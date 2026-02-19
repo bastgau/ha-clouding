@@ -50,6 +50,7 @@ async def validate_connection(hass: HomeAssistant, api_key: str | None) -> dict[
 
     Returns:
         A dictionary of errors keyed by field name, or an empty dict if valid.
+
     """
 
     errors: dict[str, str] = {}
@@ -81,6 +82,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
 
         Returns:
             A ConfigFlowResult creating the entry on success, or showing the form with errors.
+
         """
         errors: dict[str, str] = {}
         if user_input is not None:
@@ -113,6 +115,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
 
         Returns:
             A ConfigFlowResult delegating to the reauth confirm step.
+
         """
         return await self.async_step_reauth_confirm()
 
@@ -124,6 +127,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
 
         Returns:
             A ConfigFlowResult updating the entry on success, or showing the form with errors.
+
         """
         errors: dict[str, str] = {}
 
@@ -156,6 +160,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
 
         Returns:
             A ConfigFlowResult updating the entry on success, or showing the form with errors.
+
         """
         errors: dict[str, str] = {}
 
@@ -194,6 +199,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
 
         Returns:
             An OptionsFlowHandler instance.
+
         """
         return OptionsFlowHandler()
 
@@ -210,6 +216,7 @@ async def _async_validate_input(
 
     Returns:
         A dictionary of field errors, or an empty dict if input is valid.
+
     """
     if user_input[CONF_UPDATE_INTERVAL] == 1:
         return {CONF_UPDATE_INTERVAL: "invalid_update_interval"}
@@ -222,6 +229,7 @@ def _get_data_option_schema() -> vol.Schema:
 
     Returns:
         A vol.Schema instance for the options flow form.
+
     """
     return vol.Schema(
         {
@@ -256,6 +264,7 @@ class OptionsFlowHandler(OptionsFlow):
 
         Returns:
             A ConfigFlowResult either creating the entry or showing the form.
+
         """
         if user_input is not None:  # we asked to validate values entered by user
             errors = await _async_validate_input(self.hass, user_input)
