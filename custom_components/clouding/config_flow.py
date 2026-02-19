@@ -1,4 +1,4 @@
-"""Config flow for the .io integration."""
+"""Config flow for the Clouding.io integration."""
 
 from __future__ import annotations
 
@@ -42,7 +42,15 @@ STEP_REAUTH_DATA_SCHEMA = vol.Schema(
 
 
 async def validate_connection(hass: HomeAssistant, api_key: str | None) -> dict[str, str]:
-    """Validate Clouding.io connectivity."""
+    """Validate the Clouding.io API connectivity using the provided API key.
+
+    Args:
+        hass: The Home Assistant instance.
+        api_key: The Clouding.io API key to validate.
+
+    Returns:
+        A dictionary of errors keyed by field name, or an empty dict if valid.
+    """
 
     errors: dict[str, str] = {}
     session = async_get_clientsession(hass)
@@ -66,7 +74,14 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
     _hassio_discovery: HassioServiceInfo | None = None
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """Handle the initial step."""
+        """Handle the initial step of the config flow.
+
+        Args:
+            user_input: Data submitted by the user, or None on first display.
+
+        Returns:
+            A ConfigFlowResult creating the entry on success, or showing the form with errors.
+        """
         errors: dict[str, str] = {}
         if user_input is not None:
             self._async_abort_entries_match({"name": user_input[CONF_NAME]})
@@ -91,11 +106,25 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
         )
 
     async def async_step_reauth(self, entry_data: Mapping[str, Any]) -> ConfigFlowResult:  # pylint: disable=unused-argument
-        """Perform reauth upon an API authentication error."""
+        """Perform reauth upon an API authentication error.
+
+        Args:
+            entry_data: Existing config entry data (unused).
+
+        Returns:
+            A ConfigFlowResult delegating to the reauth confirm step.
+        """
         return await self.async_step_reauth_confirm()
 
     async def async_step_reauth_confirm(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """Confirm reauthentication dialog."""
+        """Confirm reauthentication dialog.
+
+        Args:
+            user_input: New API key submitted by the user, or None on first display.
+
+        Returns:
+            A ConfigFlowResult updating the entry on success, or showing the form with errors.
+        """
         errors: dict[str, str] = {}
 
         entry = self._get_reauth_entry()
@@ -120,7 +149,14 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
         )
 
     async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """Handle reconfigure flow."""
+        """Handle reconfigure flow.
+
+        Args:
+            user_input: Updated configuration data submitted by the user, or None on first display.
+
+        Returns:
+            A ConfigFlowResult updating the entry on success, or showing the form with errors.
+        """
         errors: dict[str, str] = {}
 
         entry = self._get_reconfigure_entry()
@@ -151,14 +187,30 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlowHandler:  # noqa: ARG004 # pylint: disable=unused-argument
-        """Get the options flow for this handler."""
+        """Get the options flow handler for this config entry.
+
+        Args:
+            config_entry: The current config entry (unused).
+
+        Returns:
+            An OptionsFlowHandler instance.
+        """
         return OptionsFlowHandler()
 
 
 async def _async_validate_input(
     hass: HomeAssistant,  # noqa: ARG001 # pylint: disable=unused-argument
     user_input: dict[str, Any],
-) -> Any:
+) -> dict[str, str]:
+    """Validate the options form input.
+
+    Args:
+        hass: The Home Assistant instance (unused).
+        user_input: The form data submitted by the user.
+
+    Returns:
+        A dictionary of field errors, or an empty dict if input is valid.
+    """
     if user_input[CONF_UPDATE_INTERVAL] == 1:
         return {CONF_UPDATE_INTERVAL: "invalid_update_interval"}
 
@@ -166,6 +218,11 @@ async def _async_validate_input(
 
 
 def _get_data_option_schema() -> vol.Schema:
+    """Build and return the voluptuous schema for the options form.
+
+    Returns:
+        A vol.Schema instance for the options flow form.
+    """
     return vol.Schema(
         {
             vol.Required(
