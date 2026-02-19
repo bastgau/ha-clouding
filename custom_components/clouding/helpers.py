@@ -15,7 +15,16 @@ if TYPE_CHECKING:
 
 
 def purge_entities(config_entry: CloudingConfigEntry, hass: HomeAssistant) -> None:
-    """..."""
+    """Remove devices from the registry that no longer exist in Clouding.io.
+
+    Compares the list of servers currently returned by the coordinator against
+    all devices registered under this config entry. Any device whose server ID
+    is no longer present in the coordinator data is removed from the device registry.
+
+    Args:
+        config_entry: The active Clouding.io config entry.
+        hass: The Home Assistant instance.
+    """
 
     existing_servers: list[str] = [server_id.upper() for server_id in config_entry.runtime_data.data]
     entities_to_remove: list[str] = []
