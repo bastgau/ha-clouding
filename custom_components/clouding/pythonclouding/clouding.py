@@ -43,7 +43,17 @@ class Clouding:
         return self._servers
 
     async def get_servers(self) -> dict[str, CloudingServer]:
-        """Retrieve servers from Clouding.io."""
+        """Retrieve servers from Clouding.io.
+
+        Returns:
+            A dictionary mapping server IDs to their CloudingServer instances.
+
+        Raises:
+            CloudingAuthenticationError: If the API key is invalid or authentication fails.
+            CloudingBadRequestError: If the request is malformed.
+            CloudingConnectionError: If the request fails or times out.
+            CloudingInvalidAPIResponseError: If the response does not contain a 'servers' key.
+        """
 
         url = self._base_url / "servers"
         request: ClientResponse = await self._call(url, headers=self._headers, req_timeout=self._timeout, method="get")
