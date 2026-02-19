@@ -36,7 +36,13 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
     config_entry: CloudingConfigEntry
 
     def __init__(self, hass: HomeAssistant, config_entry: CloudingConfigEntry, update_interval: int) -> None:
-        """Initialize the coordinator."""
+        """Initialize the coordinator.
+
+        Args:
+            hass: The Home Assistant instance.
+            config_entry: The config entry associated with this coordinator.
+            update_interval: The interval in seconds between data updates.
+        """
 
         super().__init__(
             hass,
@@ -49,11 +55,27 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         self.api = Clouding(session, config_entry.data[CONF_API_KEY])
 
     async def async_update_data(self) -> dict[str, CloudingServer]:
-        """..."""
+        """Fetch the latest data from Clouding.io.
+
+        Returns:
+            A dictionary mapping server IDs to their CloudingServer instances.
+
+        Raises:
+            ConfigEntryAuthFailed: If the API key is invalid or authentication fails.
+            UpdateFailed: If the API request fails for any other reason.
+        """
         await self._async_update_data()
 
     async def _async_update_data(self) -> dict[str, CloudingServer]:
-        """Fetch the latest data from Clouding.io."""
+        """Fetch the latest data from Clouding.io.
+
+        Returns:
+            A dictionary mapping server IDs to their CloudingServer instances.
+
+        Raises:
+            ConfigEntryAuthFailed: If the API key is invalid or authentication fails.
+            UpdateFailed: If the API request fails for any other reason.
+        """
 
         try:
             servers: dict[str, CloudingServer] = await self.api.get_servers()
