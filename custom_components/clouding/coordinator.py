@@ -64,7 +64,7 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             UpdateFailed: If the API request fails for any other reason.
 
         """
-        await self._async_update_data()
+        return await self._async_update_data()
 
     async def _async_update_data(self) -> dict[str, CloudingServer]:
         """Fetch the latest data from Clouding.io.
