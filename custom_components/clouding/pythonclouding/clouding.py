@@ -19,19 +19,15 @@ from .models import CloudingServer
 class Clouding:
     """Clouding.io client."""
 
-    _base_url: str
-    _headers: dict[str, str]
-    _timeout: ClientTimeout
-    _session: ClientSession
-    _servers: dict[str, CloudingServer]
-
     def __init__(self, session: ClientSession, api_key: str | None = None, timeout: float = 10) -> None:
         """Initialize the Clouding.io client."""
 
-        self._base_url = CLOUDING_BASE_URL if isinstance(CLOUDING_BASE_URL, URL) else URL(CLOUDING_BASE_URL)
-        self._headers = {"X-API-KEY": api_key}
-        self._timeout = ClientTimeout(total=timeout)
-        self._session = session
+        self._base_url: URL = CLOUDING_BASE_URL if isinstance(CLOUDING_BASE_URL, URL) else URL(CLOUDING_BASE_URL)
+        self._headers: dict[str, str] = {"X-API-KEY": str(api_key)}
+        self._timeout: ClientTimeout = ClientTimeout(total=timeout)
+        self._session: ClientSession = session
+
+        self._servers: dict[str, CloudingServer] = {}
 
     @property
     def servers(self) -> dict[str, CloudingServer]:
@@ -80,9 +76,9 @@ class Clouding:
 
         url = self._base_url / "servers" / server_id / action
         request: ClientResponse = await self._call(url, headers=self._headers, req_timeout=self._timeout, method="post")
-        return request.json
+        return await request.json()
 
-    async def _call(self, url: str, headers: dict[str, Any], req_timeout: float, method: str) -> ClientResponse:
+    async def _call(self, url: URL, headers: dict[str, Any], req_timeout: ClientTimeout, method: str) -> ClientResponse:
         """Perform an HTTP request to the Clouding.io API.
 
         Args:
@@ -146,6 +142,6 @@ class Clouding:
             raise CloudingInvalidAPIResponseError
 
         dict_results: dict[str, Any] = {result["id"]: result for result in results["servers"]}
-        self._servers = {key: CloudingServer.from_dict(value) for key, value in dict_results.items()}
+        self._servers = {key: CloudingServer.from_dict(value) for key, value in dict_results.items()}  # pyright: ignore[reportUnknownMemberType]
 
         return self._servers

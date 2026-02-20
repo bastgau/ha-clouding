@@ -57,6 +57,8 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
 
     conf_update_interval: int | None = config_entry.data.get(CONF_UPDATE_INTERVAL)
 
+    update_interval: timedelta
+
     if conf_update_interval is None:
         update_interval = MIN_TIME_BETWEEN_UPDATES
     else:

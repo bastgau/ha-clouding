@@ -31,7 +31,7 @@ PARALLEL_UPDATES = 0
 class EnumCloudingBinarySensor(StrEnum):
     """Clouding sensors."""
 
-    SERVER_RUNNING: str = "is_running"
+    SERVER_RUNNING = "is_running"
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -41,7 +41,7 @@ class CloudingBinarySensorEntityDescription(BinarySensorEntityDescription):
     name_suffix: str
 
 
-BINARY_SENSOR_ATTRIBUTES: tuple[BinarySensorEntityDescription, ...] = (
+BINARY_SENSOR_ATTRIBUTES: tuple[CloudingBinarySensorEntityDescription, ...] = (
     CloudingBinarySensorEntityDescription(
         key=EnumCloudingBinarySensor.SERVER_RUNNING,
         translation_key=EnumCloudingBinarySensor.SERVER_RUNNING,
@@ -101,7 +101,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
         super()._handle_coordinator_update()
 
     @property
-    def is_on(self) -> bool:
+    def is_on(self) -> bool:  # pyright: ignore[reportIncompatibleVariableOverride]
         """Return if the service is on."""
 
         return getattr(self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key)

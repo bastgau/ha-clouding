@@ -20,6 +20,8 @@ from .pythonclouding import (
 )
 
 if TYPE_CHECKING:
+    from datetime import timedelta
+
     from homeassistant.core import HomeAssistant
 
 _LOGGER = logging.getLogger(__name__)
@@ -32,7 +34,7 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     config_entry: CloudingConfigEntry
 
-    def __init__(self, hass: HomeAssistant, config_entry: CloudingConfigEntry, update_interval: int) -> None:
+    def __init__(self, hass: HomeAssistant, config_entry: CloudingConfigEntry, update_interval: timedelta) -> None:
         """Initialize the coordinator.
 
         Args:

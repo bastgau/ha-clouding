@@ -82,7 +82,8 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
     _LOGGER.debug(msg)
 
     try:
-        await coordinator.api.call_action_server(MAPPING_SERVICE_ACTION[action], device.serial_number)
+        serial_number: str = str(device.serial_number)
+        await coordinator.api.call_action_server(MAPPING_SERVICE_ACTION[action], serial_number)
     except CloudingBadRequestError as _:
         raise ServiceValidationError(
             translation_domain=DOMAIN,
