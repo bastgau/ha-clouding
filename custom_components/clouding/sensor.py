@@ -132,7 +132,7 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEntity, CloudingDeviceInfo):  # pylint: disable=too-many-instance-attributes
+class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEntity, CloudingDeviceInfo):  # pyright: ignore[reportIncompatibleVariableOverride] # pylint: disable=too-many-instance-attributes
     """A Clouding.io sensor."""
 
     _attr_attribution = ATTRIBUTION
