@@ -42,7 +42,7 @@ PLATFORMS: list[Platform] = [
     Platform.SENSOR,
 ]
 
-_SERVICE_MAP = {
+_SERVICE_MAP: dict[str, Callable[[ServiceCall, Any], Coroutine[Any, Any, None]]] = {
     SERVICE_ARCHIVE_SERVER: async_archive_server,
     SERVICE_UNARCHIVE_SERVER: async_unarchive_server,
     SERVICE_HARD_REBOOT_SERVER: async_hard_reboot_server,
