@@ -57,7 +57,7 @@ class Clouding:
         request: ClientResponse = await self._call(url, headers=self._headers, req_timeout=self._timeout, method="get")
         return await self._prepare_server_results(request)
 
-    async def call_action_server(self, action: str, server_id: str) -> None:
+    async def call_action_server(self, action: str, server_id: str) -> Any:
         """Send an action request to a specific Clouding.io server.
 
         Args:
@@ -78,7 +78,7 @@ class Clouding:
         request: ClientResponse = await self._call(url, headers=self._headers, req_timeout=self._timeout, method="post")
         return await request.json()
 
-    async def _call(self, url: URL, headers: dict[str, Any], req_timeout: ClientTimeout, method: str) -> ClientResponse:
+    async def _call(self, url: URL, headers: dict[str, str], req_timeout: ClientTimeout, method: str) -> ClientResponse:
         """Perform an HTTP request to the Clouding.io API.
 
         Args:

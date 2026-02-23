@@ -51,7 +51,7 @@ BINARY_SENSOR_ATTRIBUTES: tuple[CloudingBinarySensorEntityDescription, ...] = (
 )
 
 
-class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], BinarySensorEntity):  # pylint: disable=too-many-instance-attributes
+class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], BinarySensorEntity):  # pyright: ignore[reportIncompatibleVariableOverride] # pylint: disable=too-many-instance-attributes
     """A Clouding.io binary sensor."""
 
     _attr_attribution = ATTRIBUTION
@@ -104,7 +104,9 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
     def is_on(self) -> bool:  # pyright: ignore[reportIncompatibleVariableOverride]
         """Return if the service is on."""
 
-        return getattr(self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key)
+        return bool(
+            getattr(self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key)
+        )
 
     @callback
     def _update_attr(self) -> None:

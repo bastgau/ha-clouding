@@ -207,7 +207,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
 async def _async_validate_input(
     hass: HomeAssistant,  # noqa: ARG001 # pylint: disable=unused-argument
     user_input: dict[str, Any],
-) -> Any:
+) -> dict[str, Any]:
     """Validate the options form input.
 
     Args:
