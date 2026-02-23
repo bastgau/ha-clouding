@@ -31,18 +31,18 @@ PARALLEL_UPDATES = 0
 class EnumCloudingSensor(StrEnum):
     """Clouding.io sensors."""
 
-    SERVER_FLAVOR: str = "flavor"
-    SERVER_HOSTNAME: str = "hostname"
-    SERVER_PRIVATE_ID: str = "private_ip"
-    SERVER_RAM_GB: int = "ram_gb"
-    SERVER_CREATED_AT: str = "created_at"
-    SERVER_DNS_ADDRESS: str = "dns_address"
-    SERVER_NAME: str = "name"
-    SERVER_POWER_STATE: str = "power_state"
-    SERVER_PUBLIC_IP: str = "public_ip"
-    SERVER_STATUS: str = "status"
-    SERVER_VCORES: str = "vcores"
-    SERVER_VOLUME_SIZE_GB: str = "volume_size_gb"
+    SERVER_FLAVOR = "flavor"
+    SERVER_HOSTNAME = "hostname"
+    SERVER_PRIVATE_ID = "private_ip"
+    SERVER_RAM_GB = "ram_gb"
+    SERVER_CREATED_AT = "created_at"
+    SERVER_DNS_ADDRESS = "dns_address"
+    SERVER_NAME = "name"
+    SERVER_POWER_STATE = "power_state"
+    SERVER_PUBLIC_IP = "public_ip"
+    SERVER_STATUS = "status"
+    SERVER_VCORES = "vcores"
+    SERVER_VOLUME_SIZE_GB = "volume_size_gb"
 
 
 @dataclass(frozen=True, kw_only=True)
@@ -52,7 +52,7 @@ class CloudingSensorEntityDescription(SensorEntityDescription):
     name_suffix: str
 
 
-SENSOR_ATTRIBUTES: tuple[SensorEntityDescription, ...] = (
+SENSOR_ATTRIBUTES: tuple[CloudingSensorEntityDescription, ...] = (
     CloudingSensorEntityDescription(
         key=EnumCloudingSensor.SERVER_FLAVOR, translation_key=EnumCloudingSensor.SERVER_FLAVOR, name_suffix="Flavor"
     ),
@@ -132,7 +132,7 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEntity, CloudingDeviceInfo):  # pylint: disable=too-many-instance-attributes
+class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEntity, CloudingDeviceInfo):  # pyright: ignore[reportIncompatibleVariableOverride] # pylint: disable=too-many-instance-attributes
     """A Clouding.io sensor."""
 
     _attr_attribution = ATTRIBUTION
@@ -187,7 +187,7 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
             )
 
             if self.entity_description.key == EnumCloudingSensor.SERVER_STATUS:
-                value: str = self._attr_native_value.lower()
+                value: str = str(self._attr_native_value).lower()
 
                 if value == "archived":
                     self._attr_icon = "mdi:archive-check-outline"

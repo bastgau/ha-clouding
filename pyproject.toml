@@ -19,16 +19,16 @@ readme = "README.md"
 repository = "https://github.com/bastgau/ha-clouding"
 version = "0.0.0"
 
+[tool.poetry.urls]
+"Bug Tracker" = "https://github.com/bastgau/clouding/issues"
+Changelog = "https://github.com/bastgau/clouding/releases"
+
 [tool.poetry.dependencies]
 homeassistant = "2026.2.1"
 python = ">=3.13,<3.14"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "0.15.1"
-
-[tool.poetry.urls]
-"Bug Tracker" = "https://github.com/bastgau/ha-pi-hole-v6/issues"
-Changelog = "https://github.com/bastgau/ha-pi-hole-v6/releases"
 
 [build-system]
 build-backend = "poetry.core.masonry.api"

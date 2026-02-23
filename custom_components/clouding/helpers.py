@@ -40,8 +40,8 @@ def purge_entities(config_entry: CloudingConfigEntry, hass: HomeAssistant) -> No
             if current_domain != DOMAIN:
                 continue
 
-            current_entry_id = next(iter(device_attributes.config_entries))
-            current_server_id = next(iter(device_attributes.identifiers))[1].rsplit("_", 1)[1]
+            current_entry_id: str = next(iter(device_attributes.config_entries))
+            current_server_id: str = next(iter(device_attributes.identifiers))[1].rsplit("_", 1)[1]
 
         except IndexError as _:
             continue

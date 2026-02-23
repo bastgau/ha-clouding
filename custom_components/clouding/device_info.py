@@ -1,5 +1,7 @@
 """Device platform for the Clouding.io integration."""
 
+from propcache.api import cached_property
+
 from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.util import slugify
 
@@ -38,8 +40,8 @@ class CloudingDeviceInfo:  # pylint: disable=too-few-public-methods
         self._server_name = server_name
         self._server_unique_id = server_unique_id
 
-    @property
-    def device_info(self) -> DeviceInfo:
+    @cached_property
+    def device_info(self) -> DeviceInfo | None:
         """Return the device information of the entity.
 
         Returns:

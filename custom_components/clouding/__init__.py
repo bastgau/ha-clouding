@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import timedelta
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from homeassistant.const import Platform
 
@@ -33,6 +33,8 @@ from .services import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Callable, Coroutine
+
     from homeassistant.core import HomeAssistant, ServiceCall
 
 PLATFORMS: list[Platform] = [
@@ -40,7 +42,7 @@ PLATFORMS: list[Platform] = [
     Platform.SENSOR,
 ]
 
-_SERVICE_MAP = {
+_SERVICE_MAP: dict[str, Callable[[ServiceCall, Any], Coroutine[Any, Any, None]]] = {
     SERVICE_ARCHIVE_SERVER: async_archive_server,
     SERVICE_UNARCHIVE_SERVER: async_unarchive_server,
     SERVICE_HARD_REBOOT_SERVER: async_hard_reboot_server,
@@ -56,6 +58,8 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
     """Set up Clouding.io from a config entry."""
 
     conf_update_interval: int | None = config_entry.data.get(CONF_UPDATE_INTERVAL)
+
+    update_interval: timedelta
 
     if conf_update_interval is None:
         update_interval = MIN_TIME_BETWEEN_UPDATES
@@ -77,7 +81,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
     async def execute_service(call: ServiceCall) -> None:
         """Execute a service to Clouding.io."""
 
-        function_call = _SERVICE_MAP[call.service]
+        function_call: Callable[[ServiceCall, Any], Coroutine[Any, Any, None]] = _SERVICE_MAP[call.service]
         await function_call(call, call.data)
 
     for service in _SERVICE_MAP:

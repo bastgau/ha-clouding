@@ -26,7 +26,7 @@ class CloudingBaseModel(DataClassDictMixin):
             The resource ID as a string.
 
         """
-        return self.id
+        return str(self.id)
 
 
 @dataclass(kw_only=True)
@@ -43,7 +43,7 @@ class CloudingServerImage(CloudingBaseModel):
             The image name as a string.
 
         """
-        return self.name
+        return str(self.name)
 
 
 @dataclass(kw_only=True)

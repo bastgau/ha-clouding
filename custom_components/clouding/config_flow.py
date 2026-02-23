@@ -147,7 +147,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="reauth_confirm",
             data_schema=self.add_suggested_values_to_schema(
-                data_schema=STEP_REAUTH_DATA_SCHEMA, suggested_values="user_input"
+                data_schema=STEP_REAUTH_DATA_SCHEMA, suggested_values=user_input
             ),
             errors=errors,
         )
@@ -207,7 +207,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
 async def _async_validate_input(
     hass: HomeAssistant,  # noqa: ARG001 # pylint: disable=unused-argument
     user_input: dict[str, Any],
-) -> Any:
+) -> dict[str, Any]:
     """Validate the options form input.
 
     Args:
@@ -236,7 +236,7 @@ def _get_data_option_schema() -> vol.Schema:
             vol.Required(
                 CONF_UPDATE_INTERVAL,
             ): vol.All(
-                selector.NumberSelector(
+                selector.NumberSelector(  # pyright: ignore[reportUnknownMemberType]
                     selector.NumberSelectorConfig(
                         min=15,
                         max=3600,
@@ -253,7 +253,7 @@ def _get_data_option_schema() -> vol.Schema:
 class OptionsFlowHandler(OptionsFlow):
     """Options flow used to change configuration (options) of existing instance of integration."""
 
-    async def async_step_init(self, user_input=None) -> ConfigFlowResult:  # pylint: disable=unused-argument  # noqa: ANN001
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:  # pylint: disable=unused-argument
         """Handle the options flow initialization step.
 
         Validates user input if provided, updates the config entry, and returns
