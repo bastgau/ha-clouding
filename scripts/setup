@@ -239,6 +239,8 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
 
     echo -e "\n${BLUE}[config]${NC} ${GREEN}✓ Done. Check: ls -la $TARGET_FILE${NC}\n"
 
+    echo -e "\n${YELLOW}> Finalize OpenCommit configuration for current user :${NC}\n"
+
     # Script to create symlink ~/.opencommit if it doesn't exist
     TARGET_FILE="$HOME/.opencommit"
     SOURCE_FILE="/workspaces/${PROJECT}/.opencommit"
