@@ -207,7 +207,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
 async def _async_validate_input(
     hass: HomeAssistant,  # noqa: ARG001 # pylint: disable=unused-argument
     user_input: dict[str, Any],
-) -> dict[str, Any]:
+) -> dict[str, str]:
     """Validate the options form input.
 
     Args:
@@ -215,7 +215,7 @@ async def _async_validate_input(
         user_input: The form data submitted by the user.
 
     Returns:
-        A dictionary of field errors, or an empty dict if input is valid.
+        A dictionary mapping field names to error keys, or an empty dict if input is valid.
 
     """
     if user_input[CONF_UPDATE_INTERVAL] == 1:

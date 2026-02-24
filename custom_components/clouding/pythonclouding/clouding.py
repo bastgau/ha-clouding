@@ -91,7 +91,7 @@ class Clouding:
         Args:
             url: The target URL for the request.
             headers: HTTP headers to include in the request.
-            req_timeout: Timeout in seconds for the request.
+            req_timeout: The aiohttp ClientTimeout object controlling the request timeout.
             method: HTTP method to use ('get' or 'post').
 
         Returns:
