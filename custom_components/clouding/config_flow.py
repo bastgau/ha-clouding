@@ -49,7 +49,7 @@ async def validate_connection(hass: HomeAssistant, api_key: str | None) -> dict[
         api_key: The Clouding.io API key to validate.
 
     Returns:
-        A dictionary of errors keyed by field name, or an empty dict if valid.
+        A dictionary mapping field names to error keys. Returns an empty dict if the connection is valid.
 
     """
 
