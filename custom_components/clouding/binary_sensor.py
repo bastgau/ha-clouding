@@ -72,9 +72,6 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
             description: The entity description for this binary sensor.
             device_name: The name of the device as configured.
 
-        Returns:
-            None.
-
         """
 
         super().__init__(coordinator)

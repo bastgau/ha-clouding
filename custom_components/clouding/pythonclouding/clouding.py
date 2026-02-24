@@ -27,9 +27,6 @@ class Clouding:
             api_key: The Clouding.io API key for authentication.
             timeout: The request timeout in seconds.
 
-        Returns:
-            None.
-
         """
 
         self._base_url: URL = CLOUDING_BASE_URL if isinstance(CLOUDING_BASE_URL, URL) else URL(CLOUDING_BASE_URL)

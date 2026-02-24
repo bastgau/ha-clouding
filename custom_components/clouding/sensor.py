@@ -163,9 +163,6 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
             description: The entity description for this sensor.
             device_name: The name of the device as configured.
 
-        Returns:
-            None.
-
         """
 
         super().__init__(coordinator)
