@@ -40,7 +40,7 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         Args:
             hass: The Home Assistant instance.
             config_entry: The config entry associated with this coordinator.
-            update_interval: The interval in seconds between data updates.
+            update_interval: The timedelta between data updates.
 
         """
 

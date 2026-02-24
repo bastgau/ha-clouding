@@ -101,6 +101,9 @@ async def async_archive_server(service_call: ServiceCall, data: Any) -> None:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
 
+    Returns:
+        None.
+
     """
     await _async_service(service_call, data, "archive_server")
 
@@ -111,6 +114,9 @@ async def async_unarchive_server(service_call: ServiceCall, data: Any) -> None:
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
+    Returns:
+        None.
 
     """
     await _async_service(service_call, data, "unarchive_server")
@@ -123,6 +129,9 @@ async def async_hard_reboot_server(service_call: ServiceCall, data: Any) -> None
         service_call: The Home Assistant service call object.
         data: Additional service call data.
 
+    Returns:
+        None.
+
     """
     await _async_service(service_call, data, "hard_reboot_server")
 
@@ -133,6 +142,9 @@ async def async_reboot_server(service_call: ServiceCall, data: Any) -> None:
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
+    Returns:
+        None.
 
     """
     await _async_service(service_call, data, "reboot_server")
@@ -145,6 +157,9 @@ async def async_start_server(service_call: ServiceCall, data: Any) -> None:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
 
+    Returns:
+        None.
+
     """
     await _async_service(service_call, data, "start_server")
 
@@ -155,6 +170,9 @@ async def async_stop_server(service_call: ServiceCall, data: Any) -> None:
     Args:
         service_call: The Home Assistant service call object.
         data: Additional service call data.
+
+    Returns:
+        None.
 
     """
     await _async_service(service_call, data, "stop_server")

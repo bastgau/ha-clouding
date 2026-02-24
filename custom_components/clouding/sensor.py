@@ -118,7 +118,17 @@ async def async_setup_entry(
     config_entry: CloudingConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Initialize a Clouding sensor."""
+    """Initialize a Clouding sensor.
+
+    Args:
+        hass: The Home Assistant instance (unused).
+        config_entry: The Clouding.io config entry.
+        async_add_entities: Callback to register new entities.
+
+    Returns:
+        None.
+
+    """
 
     coordinator = config_entry.runtime_data
     device_name = config_entry.data[CONF_NAME]
@@ -145,7 +155,18 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
         description: CloudingSensorEntityDescription,
         device_name: str,
     ) -> None:
-        """Initialize Clouding sensors."""
+        """Initialize Clouding sensors.
+
+        Args:
+            coordinator: The data update coordinator.
+            server_id: The unique identifier of the server.
+            description: The entity description for this sensor.
+            device_name: The name of the device as configured.
+
+        Returns:
+            None.
+
+        """
 
         super().__init__(coordinator)
 
@@ -174,13 +195,23 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
 
     @callback
     def _handle_coordinator_update(self) -> None:
-        """Handle coordinator update."""
+        """Handle coordinator update.
+
+        Returns:
+            None.
+
+        """
         self._update_attr()
         super()._handle_coordinator_update()
 
     @callback
     def _update_attr(self) -> None:
-        """Update attributes for sensor."""
+        """Update attributes for sensor.
+
+        Returns:
+            None.
+
+        """
         try:
             self._attr_native_value = getattr(
                 self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key
