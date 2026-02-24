@@ -10,6 +10,7 @@ from .const import DOMAIN
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.device_registry import DeviceRegistry
 
     from .coordinator import CloudingConfigEntry
 
@@ -31,9 +32,9 @@ def purge_entities(config_entry: CloudingConfigEntry, hass: HomeAssistant) -> No
     entities_to_remove: list[str] = []
 
     config_entry_id: str = config_entry.runtime_data.config_entry.entry_id
-    device_registry = dr.async_get(hass)
+    device_registry: DeviceRegistry = dr.async_get(hass)
 
-    for device_attributes in dr.async_get(hass).devices.data.values():
+    for device_attributes in device_registry.devices.data.values():
         try:
             current_domain: str = next(iter(device_attributes.identifiers))[0]
 

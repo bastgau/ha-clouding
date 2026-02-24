@@ -84,14 +84,13 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
     try:
         serial_number: str = str(device.serial_number)
         await coordinator.api.call_action_server(MAPPING_SERVICE_ACTION[action], serial_number)
-    except CloudingBadRequestError as _:
+    except CloudingBadRequestError as err:
         raise ServiceValidationError(
             translation_domain=DOMAIN,
             translation_key="action_cannot_be_performed",
             translation_placeholders={"action_name": MAPPING_SERVICE_ACTION[action]},
-        ) from _
+        ) from err
 
-    await coordinator.async_update_data()
     await coordinator.async_refresh()
 
 
