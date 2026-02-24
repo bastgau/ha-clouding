@@ -26,6 +26,9 @@ def purge_entities(config_entry: CloudingConfigEntry, hass: HomeAssistant) -> No
         config_entry: The active Clouding.io config entry.
         hass: The Home Assistant instance.
 
+    Returns:
+        None.
+
     """
 
     existing_servers: list[str] = [server_id.upper() for server_id in config_entry.runtime_data.data]

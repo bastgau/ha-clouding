@@ -55,7 +55,19 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEntry) -> bool:
-    """Set up Clouding.io from a config entry."""
+    """Set up Clouding.io from a config entry.
+
+    Args:
+        hass: The Home Assistant instance.
+        config_entry: The Clouding.io config entry.
+
+    Returns:
+        True if the setup was successful.
+
+    Raises:
+        ConfigEntryNotReady: If the first data refresh fails.
+
+    """
 
     conf_update_interval: int | None = config_entry.data.get(CONF_UPDATE_INTERVAL)
 
@@ -79,7 +91,15 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
 
     # Register services to hass
     async def execute_service(call: ServiceCall) -> None:
-        """Execute a service to Clouding.io."""
+        """Execute a service to Clouding.io.
+
+        Args:
+            call: The Home Assistant service call object.
+
+        Returns:
+            None.
+
+        """
 
         function_call: Callable[[ServiceCall, Any], Coroutine[Any, Any, None]] = _SERVICE_MAP[call.service]
         await function_call(call, call.data)
@@ -93,6 +113,15 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: CloudingConfigEntry) -> bool:
-    """Unload a config entry."""
+    """Unload a config entry.
+
+    Args:
+        hass: The Home Assistant instance.
+        entry: The Clouding.io config entry to unload.
+
+    Returns:
+        True if the unload was successful.
+
+    """
 
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)

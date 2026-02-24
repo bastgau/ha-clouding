@@ -14,7 +14,12 @@ from mashumaro import DataClassDictMixin
 
 @dataclass
 class CloudingBaseModel(DataClassDictMixin):
-    """CloudingBaseModel."""
+    """Base model for Clouding.io API resources.
+
+    Attributes:
+        id: The unique identifier of the resource.
+
+    """
 
     id: str | None = None
 
@@ -48,7 +53,13 @@ class CloudingServerImage(CloudingBaseModel):
 
 @dataclass(kw_only=True)
 class CloudingPublicPorts(CloudingBaseModel):
-    """Server Image model for Clouding.io."""
+    """Public ports model for a Clouding.io server.
+
+    Attributes:
+        ipAddress: The public IP address associated with the port.
+        macAddress: The MAC address associated with the port.
+
+    """
 
     ipAddress: str | None = None
     macAddress: str | None = None
@@ -56,7 +67,25 @@ class CloudingPublicPorts(CloudingBaseModel):
 
 @dataclass(kw_only=True)
 class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-attributes
-    """Server model for Clouding.io."""
+    """Server model for Clouding.io.
+
+    Attributes:
+        createdAt: The datetime when the server was created.
+        dnsAddress: The DNS address of the server.
+        flavor: The flavor (instance type) of the server.
+        hostname: The hostname of the server.
+        image: The image associated with the server.
+        name: The display name of the server.
+        powerState: The current power state of the server.
+        privateIp: The private IP address of the server, if any.
+        publicIp: The public IP address of the server.
+        publicPorts: The list of public ports associated with the server.
+        ramGb: The amount of RAM allocated to the server in gigabytes.
+        status: The current status of the server.
+        vCores: The number of virtual CPU cores allocated to the server.
+        volumeSizeGb: The volume size of the server in gigabytes.
+
+    """
 
     createdAt: datetime
     dnsAddress: str

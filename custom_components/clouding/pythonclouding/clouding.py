@@ -20,7 +20,14 @@ class Clouding:
     """Clouding.io client."""
 
     def __init__(self, session: ClientSession, api_key: str | None = None, timeout: float = 10) -> None:
-        """Initialize the Clouding.io client."""
+        """Initialize the Clouding.io client.
+
+        Args:
+            session: The aiohttp client session to use for requests.
+            api_key: The Clouding.io API key for authentication.
+            timeout: The request timeout in seconds.
+
+        """
 
         self._base_url: URL = CLOUDING_BASE_URL if isinstance(CLOUDING_BASE_URL, URL) else URL(CLOUDING_BASE_URL)
         self._headers: dict[str, str] = {"X-API-KEY": str(api_key)}
