@@ -87,7 +87,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
     for service in _SERVICE_MAP:
         hass.services.async_register(DOMAIN, service, execute_service)
 
-    # add call of the function purge_entities(config_entry, hass)
+    # TODO: call purge_entities(config_entry, hass) here to remove stale devices
 
     return True
 

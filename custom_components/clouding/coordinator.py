@@ -54,19 +54,6 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         session = async_get_clientsession(hass)
         self.api = Clouding(session, config_entry.data[CONF_API_KEY])
 
-    async def async_update_data(self) -> dict[str, CloudingServer]:
-        """Fetch the latest data from Clouding.io.
-
-        Returns:
-            A dictionary mapping server IDs to their CloudingServer instances.
-
-        Raises:
-            ConfigEntryAuthFailed: If the API key is invalid or authentication fails.
-            UpdateFailed: If the API request fails for any other reason.
-
-        """
-        return await self._async_update_data()
-
     async def _async_update_data(self) -> dict[str, CloudingServer]:
         """Fetch the latest data from Clouding.io.
 

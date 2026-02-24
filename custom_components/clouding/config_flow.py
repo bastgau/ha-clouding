@@ -63,7 +63,7 @@ async def validate_connection(hass: HomeAssistant, api_key: str | None) -> dict[
         errors["base"] = "invalid_auth"
     except CloudingError:
         errors["base"] = "cannot_connect"
-    except Exception:  # pylint: disable=broad-exception-caught
+    except Exception:  # pylint: disable=broad-exception-caught  # Catch-all for unexpected errors in HA config flow — log and return generic error to the user
         _LOGGER.exception("Unexpected exception")
         errors["base"] = "unknown"
     return errors
