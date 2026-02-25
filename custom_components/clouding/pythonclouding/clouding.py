@@ -23,9 +23,9 @@ class Clouding:
         """Initialize the Clouding.io client.
 
         Args:
-            session: The aiohttp client session to use for requests.
-            api_key: The Clouding.io API key for authentication.
-            timeout: The request timeout in seconds.
+            session (ClientSession): The aiohttp client session to use for requests.
+            api_key (str | None): The Clouding.io API key for authentication.
+            timeout (float): The request timeout in seconds.
 
         """
 
@@ -68,8 +68,8 @@ class Clouding:
         """Send an action request to a specific Clouding.io server.
 
         Args:
-            action: The action to perform (e.g. 'start', 'stop', 'reboot', 'hard-reboot').
-            server_id: The unique identifier of the target server.
+            action (str): The action to perform (e.g. 'start', 'stop', 'reboot', 'hard-reboot').
+            server_id (str): The unique identifier of the target server.
 
         Returns:
             dict[str, Any]: A dictionary containing JSON response from the API.
@@ -91,10 +91,10 @@ class Clouding:
         """Perform an HTTP request to the Clouding.io API.
 
         Args:
-            url: The target URL for the request.
-            headers: HTTP headers to include in the request.
-            req_timeout: The aiohttp ClientTimeout object controlling the request timeout.
-            method: HTTP method to use ('get' or 'post').
+            url (URL): The target URL for the request.
+            headers (dict[str, str]): HTTP headers to include in the request.
+            req_timeout (ClientTimeout): The aiohttp ClientTimeout object controlling the request timeout.
+            method (Literal["get", "post"]): HTTP method to use ('get' or 'post').
 
         Returns:
             ClientResponse: The aiohttp ClientResponse object.
@@ -143,7 +143,7 @@ class Clouding:
         """Parse the API response and populate the internal servers dictionary.
 
         Args:
-            request: The aiohttp ClientResponse from the servers endpoint.
+            request (ClientResponse): The aiohttp ClientResponse from the servers endpoint.
 
         Returns:
             dict[str, CloudingServer]: A dictionary mapping server IDs to their CloudingServer instances.
