@@ -19,11 +19,6 @@ class CloudingDeviceInfo:  # pylint: disable=too-few-public-methods
 
     """
 
-    _device_name: str
-    _model_name: str
-    _server_name: str
-    _server_unique_id: str
-
     def __init__(self, device_name: str, model_name: str, server_name: str, server_unique_id: str) -> None:
         """Initialize CloudingDeviceInfo.
 
