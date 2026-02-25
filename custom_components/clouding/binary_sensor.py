@@ -36,7 +36,12 @@ class EnumCloudingBinarySensor(StrEnum):
 
 @dataclass(frozen=True, kw_only=True)
 class CloudingBinarySensorEntityDescription(BinarySensorEntityDescription):
-    """Describe Clouding.io sensor entity."""
+    """Describe Clouding.io binary sensor entity.
+
+    Attributes:
+        name_suffix: The suffix appended to the device name to build the entity name.
+
+    """
 
     name_suffix: str
 
@@ -118,7 +123,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
         """Return if the binary sensor is on.
 
         Returns:
-            result (bool): True if the server is running, False otherwise.
+            bool: True if the server is running, False otherwise.
 
         """
 
@@ -142,6 +147,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
                     "Last Refresh": dt_util.utcnow(),
                 }
 
+            # Any is intentional: value type depends on the entity description key at runtime
             self._attr_native_value = getattr(
                 self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key
             )

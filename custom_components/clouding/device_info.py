@@ -45,7 +45,7 @@ class CloudingDeviceInfo:  # pylint: disable=too-few-public-methods
         """Return the device information of the entity.
 
         Returns:
-            A DeviceInfo instance populated with Clouding.io server metadata.
+            DeviceInfo | None: A DeviceInfo instance populated with Clouding.io server metadata.
 
         """
 

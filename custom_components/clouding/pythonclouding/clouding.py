@@ -1,7 +1,7 @@
 """Python API wrapper for Clouding.io."""
 
 from http import HTTPStatus
-from typing import Any
+from typing import Any, Literal
 
 from aiohttp import ClientError, ClientResponse, ClientResponseError, ClientSession, ClientTimeout
 from yarl import URL
@@ -41,7 +41,7 @@ class Clouding:
         """Return the cached dictionary of CloudingServer instances.
 
         Returns:
-            A dictionary mapping server IDs to their CloudingServer instances.
+            dict[str, CloudingServer]: A dictionary mapping server IDs to their CloudingServer instances.
 
         """
         return self._servers
@@ -50,7 +50,7 @@ class Clouding:
         """Retrieve servers from Clouding.io.
 
         Returns:
-            A dictionary mapping server IDs to their CloudingServer instances.
+            dict[str, CloudingServer]: A dictionary mapping server IDs to their CloudingServer instances.
 
         Raises:
             CloudingAuthenticationError: If the API key is invalid or authentication fails.
@@ -72,7 +72,8 @@ class Clouding:
             server_id: The unique identifier of the target server.
 
         Returns:
-            The JSON response from the API.
+            Any: The raw JSON response from the API. The return type is intentionally
+                set to Any as the response structure is not guaranteed by aiohttp.
 
         Raises:
             CloudingAuthenticationError: If authentication fails.
@@ -85,17 +86,19 @@ class Clouding:
         request: ClientResponse = await self._call(url, headers=self._headers, req_timeout=self._timeout, method="post")
         return await request.json()
 
-    async def _call(self, url: URL, headers: dict[str, str], req_timeout: ClientTimeout, method: str) -> ClientResponse:
+    async def _call(
+        self, url: URL, headers: dict[str, str], req_timeout: ClientTimeout, method: Literal["get", "post"]
+    ) -> ClientResponse:
         """Perform an HTTP request to the Clouding.io API.
 
         Args:
             url: The target URL for the request.
             headers: HTTP headers to include in the request.
-            req_timeout: Timeout in seconds for the request.
+            req_timeout: The aiohttp ClientTimeout object controlling the request timeout.
             method: HTTP method to use ('get' or 'post').
 
         Returns:
-            The aiohttp ClientResponse object.
+            ClientResponse: The aiohttp ClientResponse object.
 
         Raises:
             CloudingAuthenticationError: If the response status is 401 Unauthorized.
@@ -106,11 +109,13 @@ class Clouding:
 
         exception_msg: str = ""
 
+        request: ClientResponse
+
         try:
             if method == "post":
-                request: ClientResponse = await self._session.post(url, headers=headers, timeout=req_timeout)
+                request = await self._session.post(url, headers=headers, timeout=req_timeout)
             else:
-                request: ClientResponse = await self._session.get(url, headers=headers, timeout=req_timeout)
+                request = await self._session.get(url, headers=headers, timeout=req_timeout)
             request.raise_for_status()
         except ClientResponseError as e:
             if e.status == HTTPStatus.UNAUTHORIZED:
@@ -136,7 +141,7 @@ class Clouding:
             request: The aiohttp ClientResponse from the servers endpoint.
 
         Returns:
-            A dictionary mapping server IDs to their CloudingServer instances.
+            dict[str, CloudingServer]: A dictionary mapping server IDs to their CloudingServer instances.
 
         Raises:
             CloudingInvalidAPIResponseError: If the response does not contain a 'servers' key.

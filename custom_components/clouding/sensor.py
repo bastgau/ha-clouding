@@ -47,7 +47,12 @@ class EnumCloudingSensor(StrEnum):
 
 @dataclass(frozen=True, kw_only=True)
 class CloudingSensorEntityDescription(SensorEntityDescription):
-    """Describe Clouding.io sensor entity."""
+    """Describe Clouding.io sensor entity.
+
+    Attributes:
+        name_suffix: The suffix appended to the device name to build the entity name.
+
+    """
 
     name_suffix: str
 

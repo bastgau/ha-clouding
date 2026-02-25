@@ -28,7 +28,7 @@ class CloudingBaseModel(DataClassDictMixin):
         """Return the unique identifier of the resource.
 
         Returns:
-            The resource ID as a string.
+            str: The resource ID as a string, or "None" if the id attribute is not set.
 
         """
         return str(self.id)
@@ -36,7 +36,12 @@ class CloudingBaseModel(DataClassDictMixin):
 
 @dataclass(kw_only=True)
 class CloudingServerImage(CloudingBaseModel):
-    """Server Image model for Clouding.io."""
+    """Server Image model for Clouding.io.
+
+    Attributes:
+        name: The name of the server image.
+
+    """
 
     name: str | None = None
 
@@ -45,7 +50,7 @@ class CloudingServerImage(CloudingBaseModel):
         """Return the name of the server image.
 
         Returns:
-            The image name as a string.
+            str: The image name as a string, or "None" if the name attribute is not set.
 
         """
         return str(self.name)
@@ -107,7 +112,7 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return the server creation date with Paris timezone.
 
         Returns:
-            A timezone-aware datetime object set to Europe/Paris.
+            datetime: A timezone-aware datetime object set to Europe/Paris.
 
         """
         return self.createdAt.replace(tzinfo=ZoneInfo("Europe/Paris"))
@@ -117,7 +122,7 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return the DNS address of the server.
 
         Returns:
-            The DNS address as a string.
+            str: The DNS address of the server.
 
         """
         return self.dnsAddress
@@ -127,7 +132,7 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return the flavor (instance type) of the server.
 
         Returns:
-            The flavor identifier as a string.
+            str: The flavor identifier of the server.
 
         """
         return self.flavor
@@ -137,7 +142,7 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return the hostname of the server.
 
         Returns:
-            The hostname as a string.
+            str: The hostname of the server.
 
         """
         return self.hostname
@@ -147,7 +152,7 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return the image associated with the server.
 
         Returns:
-            A CloudingServerImage instance.
+            CloudingServerImage: The image associated with the server.
 
         """
         return self.image
@@ -157,7 +162,7 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return the display name of the server.
 
         Returns:
-            The server name as a string.
+            str: The display name of the server.
 
         """
         return self.name
@@ -167,7 +172,7 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return the current power state of the server.
 
         Returns:
-            The power state as a string (e.g. 'running', 'shutdown').
+            str: The current power state of the server (e.g. 'running', 'shutdown').
 
         """
         return self.powerState
@@ -177,7 +182,7 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return the public IP address of the server.
 
         Returns:
-            The public IP address as a string.
+            str: The public IP address of the server.
 
         """
         return self.publicIp
@@ -187,7 +192,7 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return the current status of the server.
 
         Returns:
-            The status as a string (e.g. 'active', 'archived', 'stopped').
+            str: The current status of the server (e.g. 'active', 'archived', 'stopped').
 
         """
         return self.status
@@ -197,7 +202,7 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return the amount of RAM allocated to the server in gigabytes.
 
         Returns:
-            The RAM size as an integer.
+            int: The amount of RAM allocated to the server in gigabytes.
 
         """
         return self.ramGb
@@ -207,7 +212,7 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return the number of virtual CPU cores allocated to the server.
 
         Returns:
-            The vCores count as an integer.
+            int: The number of virtual CPU cores allocated to the server.
 
         """
         return self.vCores
@@ -217,7 +222,7 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return the volume size of the server in gigabytes.
 
         Returns:
-            The volume size as an integer.
+            int: The volume size of the server in gigabytes.
 
         """
         return self.volumeSizeGb
@@ -227,7 +232,7 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return whether the server is currently running.
 
         Returns:
-            True if the power state is not 'shutdown', False otherwise.
+            bool: True if the power state is not 'shutdown', False otherwise.
 
         """
         return self.powerState.lower() != "shutdown"

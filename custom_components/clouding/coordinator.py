@@ -58,7 +58,7 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         """Fetch the latest data from Clouding.io.
 
         Returns:
-            A dictionary mapping server IDs to their CloudingServer instances.
+            dict[str, CloudingServer]: A dictionary mapping server IDs to their CloudingServer instances.
 
         Raises:
             ConfigEntryAuthFailed: If the API key is invalid or authentication fails.

@@ -16,6 +16,8 @@ from .pythonclouding import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from homeassistant.core import ServiceCall
 
     from .coordinator import CloudingDataUpdateCoordinator
@@ -33,7 +35,7 @@ MAPPING_SERVICE_ACTION: dict[str, str] = {
 }
 
 
-async def _async_service(service_call: ServiceCall, data: Any, action: str) -> None:  # noqa: ARG001 # pylint: disable=unused-argument
+async def _async_service(service_call: ServiceCall, data: Mapping[str, Any], action: str) -> None:
     """Dispatch a service action to the Clouding.io API for the target device.
 
     Resolves the device from the service call data, validates its config entry,
@@ -41,7 +43,7 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
 
     Args:
         service_call: The Home Assistant service call object.
-        data: Additional service call data (unused, kept for signature consistency).
+        data: Additional service call data passed.
         action: The action name to perform (e.g. 'start_server', 'reboot_server').
 
     Raises:
@@ -49,6 +51,8 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
             loaded, no valid config entry is found, or the action cannot be performed.
 
     """
+
+    _LOGGER.debug("Action '%s' performed with data: %s", action, data)
 
     device_id = service_call.data[CONF_DEVICE_ID]
 
@@ -94,7 +98,7 @@ async def _async_service(service_call: ServiceCall, data: Any, action: str) -> N
     await coordinator.async_refresh()
 
 
-async def async_archive_server(service_call: ServiceCall, data: Any) -> None:
+async def async_archive_server(service_call: ServiceCall, data: Mapping[str, Any]) -> None:
     """Archive a Clouding.io server.
 
     Args:
@@ -108,7 +112,7 @@ async def async_archive_server(service_call: ServiceCall, data: Any) -> None:
     await _async_service(service_call, data, "archive_server")
 
 
-async def async_unarchive_server(service_call: ServiceCall, data: Any) -> None:
+async def async_unarchive_server(service_call: ServiceCall, data: Mapping[str, Any]) -> None:
     """Unarchive a Clouding.io server.
 
     Args:
@@ -122,7 +126,7 @@ async def async_unarchive_server(service_call: ServiceCall, data: Any) -> None:
     await _async_service(service_call, data, "unarchive_server")
 
 
-async def async_hard_reboot_server(service_call: ServiceCall, data: Any) -> None:
+async def async_hard_reboot_server(service_call: ServiceCall, data: Mapping[str, Any]) -> None:
     """Hard reboot a Clouding.io server.
 
     Args:
@@ -136,7 +140,7 @@ async def async_hard_reboot_server(service_call: ServiceCall, data: Any) -> None
     await _async_service(service_call, data, "hard_reboot_server")
 
 
-async def async_reboot_server(service_call: ServiceCall, data: Any) -> None:
+async def async_reboot_server(service_call: ServiceCall, data: Mapping[str, Any]) -> None:
     """Reboot a Clouding.io server.
 
     Args:
@@ -150,7 +154,7 @@ async def async_reboot_server(service_call: ServiceCall, data: Any) -> None:
     await _async_service(service_call, data, "reboot_server")
 
 
-async def async_start_server(service_call: ServiceCall, data: Any) -> None:
+async def async_start_server(service_call: ServiceCall, data: Mapping[str, Any]) -> None:
     """Start a Clouding.io server.
 
     Args:
@@ -164,7 +168,7 @@ async def async_start_server(service_call: ServiceCall, data: Any) -> None:
     await _async_service(service_call, data, "start_server")
 
 
-async def async_stop_server(service_call: ServiceCall, data: Any) -> None:
+async def async_stop_server(service_call: ServiceCall, data: Mapping[str, Any]) -> None:
     """Stop a Clouding.io server.
 
     Args:

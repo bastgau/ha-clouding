@@ -33,7 +33,7 @@ from .services import (
 )
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Coroutine
+    from collections.abc import Callable, Coroutine, Mapping
 
     from homeassistant.core import HomeAssistant, ServiceCall
 
@@ -42,7 +42,7 @@ PLATFORMS: list[Platform] = [
     Platform.SENSOR,
 ]
 
-_SERVICE_MAP: dict[str, Callable[[ServiceCall, Any], Coroutine[Any, Any, None]]] = {
+_SERVICE_MAP: dict[str, Callable[[ServiceCall, Mapping[str, Any]], Coroutine[Any, Any, None]]] = {
     SERVICE_ARCHIVE_SERVER: async_archive_server,
     SERVICE_UNARCHIVE_SERVER: async_unarchive_server,
     SERVICE_HARD_REBOOT_SERVER: async_hard_reboot_server,
@@ -62,7 +62,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
         config_entry: The Clouding.io config entry.
 
     Returns:
-        True if the setup was successful.
+        bool: True if the setup was successful.
 
     Raises:
         ConfigEntryNotReady: If the first data refresh fails.
@@ -101,13 +101,13 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
 
         """
 
-        function_call: Callable[[ServiceCall, Any], Coroutine[Any, Any, None]] = _SERVICE_MAP[call.service]
+        function_call: Callable[[ServiceCall, Mapping[str, Any]], Coroutine[Any, Any, None]] = _SERVICE_MAP[call.service]
         await function_call(call, call.data)
 
     for service in _SERVICE_MAP:
         hass.services.async_register(DOMAIN, service, execute_service)
 
-    # TODO: call purge_entities(config_entry, hass) here to remove stale devices
+    # (@bastgau) call purge_entities(config_entry, hass) here to remove stale devices (not yet implemented)
 
     return True
 
@@ -120,7 +120,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: CloudingConfigEntry) ->
         entry: The Clouding.io config entry to unload.
 
     Returns:
-        True if the unload was successful.
+        bool: True if the unload was successful.
 
     """
 
