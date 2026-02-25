@@ -31,28 +31,33 @@ PARALLEL_UPDATES = 0
 class EnumCloudingSensor(StrEnum):
     """Clouding.io sensors."""
 
-    SERVER_FLAVOR: str = "flavor"
-    SERVER_HOSTNAME: str = "hostname"
-    SERVER_PRIVATE_ID: str = "private_ip"
-    SERVER_RAM_GB: int = "ram_gb"
-    SERVER_CREATED_AT: str = "created_at"
-    SERVER_DNS_ADDRESS: str = "dns_address"
-    SERVER_NAME: str = "name"
-    SERVER_POWER_STATE: str = "power_state"
-    SERVER_PUBLIC_IP: str = "public_ip"
-    SERVER_STATUS: str = "status"
-    SERVER_VCORES: int = "vcores"
-    SERVER_VOLUME_SIZE_GB: int = "volume_size_gb"
+    SERVER_FLAVOR = "flavor"
+    SERVER_HOSTNAME = "hostname"
+    SERVER_PRIVATE_ID = "private_ip"
+    SERVER_RAM_GB = "ram_gb"
+    SERVER_CREATED_AT = "created_at"
+    SERVER_DNS_ADDRESS = "dns_address"
+    SERVER_NAME = "name"
+    SERVER_POWER_STATE = "power_state"
+    SERVER_PUBLIC_IP = "public_ip"
+    SERVER_STATUS = "status"
+    SERVER_VCORES = "vcores"
+    SERVER_VOLUME_SIZE_GB = "volume_size_gb"
 
 
 @dataclass(frozen=True, kw_only=True)
 class CloudingSensorEntityDescription(SensorEntityDescription):
-    """Describe Clouding.io sensor entity."""
+    """Describe Clouding.io sensor entity.
+
+    Attributes:
+        name_suffix: The suffix appended to the device name to build the entity name.
+
+    """
 
     name_suffix: str
 
 
-SENSOR_ATTRIBUTES: tuple[SensorEntityDescription, ...] = (
+SENSOR_ATTRIBUTES: tuple[CloudingSensorEntityDescription, ...] = (
     CloudingSensorEntityDescription(
         key=EnumCloudingSensor.SERVER_FLAVOR, translation_key=EnumCloudingSensor.SERVER_FLAVOR, name_suffix="Flavor"
     ),
@@ -118,7 +123,17 @@ async def async_setup_entry(
     config_entry: CloudingConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Initialize a Clouding sensor."""
+    """Initialize a Clouding sensor.
+
+    Args:
+        hass (HomeAssistant): The Home Assistant instance (unused).
+        config_entry (CloudingConfigEntry): The Clouding.io config entry.
+        async_add_entities (AddConfigEntryEntitiesCallback): Callback to register new entities.
+
+    Returns:
+        None.
+
+    """
 
     coordinator = config_entry.runtime_data
     device_name = config_entry.data[CONF_NAME]
@@ -132,7 +147,7 @@ async def async_setup_entry(
     async_add_entities(entities)
 
 
-class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEntity, CloudingDeviceInfo):  # pylint: disable=too-many-instance-attributes
+class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEntity, CloudingDeviceInfo):  # pyright: ignore[reportIncompatibleVariableOverride] # pylint: disable=too-many-instance-attributes
     """A Clouding.io sensor."""
 
     _attr_attribution = ATTRIBUTION
@@ -145,7 +160,15 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
         description: CloudingSensorEntityDescription,
         device_name: str,
     ) -> None:
-        """Initialize Clouding sensors."""
+        """Initialize Clouding sensors.
+
+        Args:
+            coordinator (CloudingDataUpdateCoordinator): The data update coordinator.
+            server_id (str): The unique identifier of the server.
+            description (CloudingSensorEntityDescription): The entity description for this sensor.
+            device_name (str): The name of the device as configured.
+
+        """
 
         super().__init__(coordinator)
 
@@ -174,26 +197,38 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
 
     @callback
     def _handle_coordinator_update(self) -> None:
-        """Handle coordinator update."""
+        """Handle coordinator update.
+
+        Returns:
+            None.
+
+        """
         self._update_attr()
         super()._handle_coordinator_update()
 
     @callback
     def _update_attr(self) -> None:
-        """Update attributes for sensor."""
+        """Update attributes for sensor.
+
+        Returns:
+            None.
+
+        """
         try:
             self._attr_native_value = getattr(
                 self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key
             )
 
             if self.entity_description.key == EnumCloudingSensor.SERVER_STATUS:
-                if self._attr_native_value.lower() == "archived":
+                value: str = str(self._attr_native_value).lower()
+
+                if value == "archived":
                     self._attr_icon = "mdi:archive-check-outline"
-                elif self._attr_native_value.lower() in ["unarchiving", "archiving"]:
+                elif value in ["unarchiving", "archiving"]:
                     self._attr_icon = "mdi:archive-clock-outline"
-                elif self._attr_native_value.lower() == "stopped":
+                elif value == "stopped":
                     self._attr_icon = "mdi:close-circle-outline"
-                elif self._attr_native_value.lower() in ["starting", "stopping"]:
+                elif value in ["starting", "stopping"]:
                     self._attr_icon = "mdi:refresh-circle"
                 else:
                     self._attr_icon = "mdi:check-circle-outline"
