@@ -19,19 +19,14 @@ class CloudingDeviceInfo:  # pylint: disable=too-few-public-methods
 
     """
 
-    _device_name: str
-    _model_name: str
-    _server_name: str
-    _server_unique_id: str
-
     def __init__(self, device_name: str, model_name: str, server_name: str, server_unique_id: str) -> None:
         """Initialize CloudingDeviceInfo.
 
         Args:
-            device_name: The integration instance name configured by the user.
-            model_name: The server image/model name.
-            server_name: The display name of the server.
-            server_unique_id: The unique identifier of the server.
+            device_name (str): The integration instance name configured by the user.
+            model_name (str): The server image/model name.
+            server_name (str): The display name of the server.
+            server_unique_id (str): The unique identifier of the server.
 
         """
 
@@ -41,11 +36,11 @@ class CloudingDeviceInfo:  # pylint: disable=too-few-public-methods
         self._server_unique_id = server_unique_id
 
     @cached_property
-    def device_info(self) -> DeviceInfo | None:
+    def device_info(self) -> DeviceInfo:
         """Return the device information of the entity.
 
         Returns:
-            DeviceInfo | None: A DeviceInfo instance populated with Clouding.io server metadata.
+            DeviceInfo: A DeviceInfo instance populated with Clouding.io server metadata.
 
         """
 

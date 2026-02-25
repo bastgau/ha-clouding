@@ -58,8 +58,8 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
     """Set up Clouding.io from a config entry.
 
     Args:
-        hass: The Home Assistant instance.
-        config_entry: The Clouding.io config entry.
+        hass (HomeAssistant): The Home Assistant instance.
+        config_entry (CloudingConfigEntry): The Clouding.io config entry.
 
     Returns:
         bool: True if the setup was successful.
@@ -94,7 +94,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
         """Execute a service to Clouding.io.
 
         Args:
-            call: The Home Assistant service call object.
+            call (ServiceCall): The Home Assistant service call object.
 
         Returns:
             None.
@@ -116,8 +116,8 @@ async def async_unload_entry(hass: HomeAssistant, entry: CloudingConfigEntry) ->
     """Unload a config entry.
 
     Args:
-        hass: The Home Assistant instance.
-        entry: The Clouding.io config entry to unload.
+        hass (HomeAssistant): The Home Assistant instance.
+        entry (CloudingConfigEntry): The Clouding.io config entry to unload.
 
     Returns:
         bool: True if the unload was successful.
