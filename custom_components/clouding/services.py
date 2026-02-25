@@ -42,9 +42,9 @@ async def _async_service(service_call: ServiceCall, data: Mapping[str, Any], act
     then calls the appropriate API action on the corresponding server.
 
     Args:
-        service_call: The Home Assistant service call object.
-        data: Additional service call data passed.
-        action: The action name to perform (e.g. 'start_server', 'reboot_server').
+        service_call (ServiceCall): The Home Assistant service call object.
+        data (Mapping[str, Any]): Additional service call data passed.
+        action (str): The action name to perform (e.g. 'start_server', 'reboot_server').
 
     Returns:
         None.
@@ -105,8 +105,8 @@ async def async_archive_server(service_call: ServiceCall, data: Mapping[str, Any
     """Archive a Clouding.io server.
 
     Args:
-        service_call: The Home Assistant service call object.
-        data: Additional service call data.
+        service_call (ServiceCall): The Home Assistant service call object.
+        data (Mapping[str, Any]): Additional service call data.
 
     Returns:
         None.
@@ -119,8 +119,8 @@ async def async_unarchive_server(service_call: ServiceCall, data: Mapping[str, A
     """Unarchive a Clouding.io server.
 
     Args:
-        service_call: The Home Assistant service call object.
-        data: Additional service call data.
+        service_call (ServiceCall): The Home Assistant service call object.
+        data (Mapping[str, Any]): Additional service call data.
 
     Returns:
         None.
@@ -133,8 +133,8 @@ async def async_hard_reboot_server(service_call: ServiceCall, data: Mapping[str,
     """Hard reboot a Clouding.io server.
 
     Args:
-        service_call: The Home Assistant service call object.
-        data: Additional service call data.
+        service_call (ServiceCall): The Home Assistant service call object.
+        data (Mapping[str, Any]): Additional service call data.
 
     Returns:
         None.
@@ -147,8 +147,8 @@ async def async_reboot_server(service_call: ServiceCall, data: Mapping[str, Any]
     """Reboot a Clouding.io server.
 
     Args:
-        service_call: The Home Assistant service call object.
-        data: Additional service call data.
+        service_call (ServiceCall): The Home Assistant service call object.
+        data (Mapping[str, Any]): Additional service call data.
 
     Returns:
         None.
@@ -161,8 +161,8 @@ async def async_start_server(service_call: ServiceCall, data: Mapping[str, Any])
     """Start a Clouding.io server.
 
     Args:
-        service_call: The Home Assistant service call object.
-        data: Additional service call data.
+        service_call (ServiceCall): The Home Assistant service call object.
+        data (Mapping[str, Any]): Additional service call data.
 
     Returns:
         None.
@@ -175,8 +175,8 @@ async def async_stop_server(service_call: ServiceCall, data: Mapping[str, Any]) 
     """Stop a Clouding.io server.
 
     Args:
-        service_call: The Home Assistant service call object.
-        data: Additional service call data.
+        service_call (ServiceCall): The Home Assistant service call object.
+        data (Mapping[str, Any]): Additional service call data.
 
     Returns:
         None.

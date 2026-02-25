@@ -28,10 +28,10 @@ class CloudingDeviceInfo:  # pylint: disable=too-few-public-methods
         """Initialize CloudingDeviceInfo.
 
         Args:
-            device_name: The integration instance name configured by the user.
-            model_name: The server image/model name.
-            server_name: The display name of the server.
-            server_unique_id: The unique identifier of the server.
+            device_name (str): The integration instance name configured by the user.
+            model_name (str): The server image/model name.
+            server_name (str): The display name of the server.
+            server_unique_id (str): The unique identifier of the server.
 
         """
 

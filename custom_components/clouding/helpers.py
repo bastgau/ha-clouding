@@ -23,8 +23,8 @@ def purge_entities(config_entry: CloudingConfigEntry, hass: HomeAssistant) -> No
     is no longer present in the coordinator data is removed from the device registry.
 
     Args:
-        config_entry: The active Clouding.io config entry.
-        hass: The Home Assistant instance.
+        config_entry (CloudingConfigEntry): The active Clouding.io config entry.
+        hass (HomeAssistant): The Home Assistant instance.
 
     Returns:
         None.

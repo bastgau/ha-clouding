@@ -45,8 +45,8 @@ async def validate_connection(hass: HomeAssistant, api_key: str | None) -> dict[
     """Validate the Clouding.io API connectivity using the provided API key.
 
     Args:
-        hass: The Home Assistant instance.
-        api_key: The Clouding.io API key to validate.
+        hass (HomeAssistant): The Home Assistant instance.
+        api_key (str | None): The Clouding.io API key to validate.
 
     Returns:
         dict[str, str]: A dictionary mapping field names to error keys, or an empty dict if the connection is valid.
@@ -78,7 +78,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
         """Handle the initial step of the config flow.
 
         Args:
-            user_input: Data submitted by the user, or None on first display.
+            user_input (dict[str, Any] | None): Data submitted by the user, or None on first display.
 
         Returns:
             ConfigFlowResult: A new entry on success, or the form with errors.
@@ -111,7 +111,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
         """Perform reauth upon an API authentication error.
 
         Args:
-            entry_data: Existing config entry data (unused).
+            entry_data (Mapping[str, Any]): Existing config entry data (unused).
 
         Returns:
             ConfigFlowResult: Delegates to the reauth confirm step.
@@ -123,7 +123,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
         """Confirm reauthentication dialog.
 
         Args:
-            user_input: New API key submitted by the user, or None on first display.
+            user_input (dict[str, Any] | None): New API key submitted by the user, or None on first display.
 
         Returns:
             ConfigFlowResult: Updates the entry on success, or shows the form with errors.
@@ -156,7 +156,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
         """Handle reconfigure flow.
 
         Args:
-            user_input: Updated configuration data submitted by the user, or None on first display.
+            user_input (dict[str, Any] | None): Updated configuration data submitted by the user, or None on first display.
 
         Returns:
             ConfigFlowResult: Updates the entry on success, or shows the form with errors.
@@ -195,7 +195,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
         """Get the options flow handler for this config entry.
 
         Args:
-            config_entry: The current config entry (unused).
+            config_entry (ConfigEntry): The current config entry (unused).
 
         Returns:
             OptionsFlowHandler: The options flow handler instance.
@@ -211,8 +211,8 @@ async def _async_validate_input(
     """Validate the options form input.
 
     Args:
-        hass: The Home Assistant instance (unused).
-        user_input: The form data submitted by the user.
+        hass (HomeAssistant): The Home Assistant instance (unused).
+        user_input (dict[str, Any]): The form data submitted by the user.
 
     Returns:
         dict[str, str]: A dictionary mapping field names to error keys, or an empty dict if input is valid.
@@ -260,7 +260,7 @@ class OptionsFlowHandler(OptionsFlow):
         the options form with the current values pre-filled.
 
         Args:
-            user_input: Form data submitted by the user, or None on first load.
+            user_input (dict[str, Any] | None): Form data submitted by the user, or None on first load.
 
         Returns:
             ConfigFlowResult: A new entry on success, or the form with errors.

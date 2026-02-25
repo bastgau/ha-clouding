@@ -126,9 +126,9 @@ async def async_setup_entry(
     """Initialize a Clouding sensor.
 
     Args:
-        hass: The Home Assistant instance (unused).
-        config_entry: The Clouding.io config entry.
-        async_add_entities: Callback to register new entities.
+        hass (HomeAssistant): The Home Assistant instance (unused).
+        config_entry (CloudingConfigEntry): The Clouding.io config entry.
+        async_add_entities (AddConfigEntryEntitiesCallback): Callback to register new entities.
 
     Returns:
         None.
@@ -163,10 +163,10 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
         """Initialize Clouding sensors.
 
         Args:
-            coordinator: The data update coordinator.
-            server_id: The unique identifier of the server.
-            description: The entity description for this sensor.
-            device_name: The name of the device as configured.
+            coordinator (CloudingDataUpdateCoordinator): The data update coordinator.
+            server_id (str): The unique identifier of the server.
+            description (CloudingSensorEntityDescription): The entity description for this sensor.
+            device_name (str): The name of the device as configured.
 
         """
 
