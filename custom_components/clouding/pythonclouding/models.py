@@ -112,10 +112,10 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         """Return the server creation date with Paris timezone.
 
         Returns:
-            datetime: A timezone-aware datetime object set to Europe/Paris.
+            datetime: A timezone-aware datetime object set to UTC.
 
         """
-        return self.createdAt.replace(tzinfo=ZoneInfo("Europe/Paris"))
+        return self.createdAt.replace(tzinfo=ZoneInfo("UTC"))
 
     @property
     def attr_dns_address(self) -> str:
