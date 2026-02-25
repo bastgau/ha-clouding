@@ -188,6 +188,16 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
         return self.publicIp
 
     @property
+    def attr_private_ip(self) -> str | None:
+        """Return the private IP address of the server.
+
+        Returns:
+            str | None: The private IP address of the server. None if missing/unknown.
+
+        """
+        return self.privateIp
+
+    @property
     def attr_status(self) -> str:
         """Return the current status of the server.
 

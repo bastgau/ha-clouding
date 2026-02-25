@@ -64,7 +64,7 @@ class Clouding:
         request: ClientResponse = await self._call(url, headers=self._headers, req_timeout=self._timeout, method="get")
         return await self._prepare_server_results(request)
 
-    async def call_action_server(self, action: str, server_id: str) -> Any:
+    async def call_action_server(self, action: str, server_id: str) -> dict[str, Any]:
         """Send an action request to a specific Clouding.io server.
 
         Args:
@@ -72,8 +72,7 @@ class Clouding:
             server_id: The unique identifier of the target server.
 
         Returns:
-            Any: The raw JSON response from the API. The return type is intentionally
-                set to Any as the response structure is not guaranteed by aiohttp.
+            dict[str, Any]: A dictionary containing JSON response from the API.
 
         Raises:
             CloudingAuthenticationError: If authentication fails.
@@ -101,22 +100,28 @@ class Clouding:
             ClientResponse: The aiohttp ClientResponse object.
 
         Raises:
+            KeyError: if the method is not supported.
             CloudingAuthenticationError: If the response status is 401 Unauthorized.
             CloudingBadRequestError: If the response status is 400 Bad Request.
             CloudingConnectionError: If the request fails, times out, or returns another error status.
 
         """
 
+        if method not in ["get", "post"]:
+            msg: str = f"The method with the value '{method}' is unknown"
+            raise KeyError(msg)
+
         exception_msg: str = ""
 
-        request: ClientResponse
+        response: ClientResponse | None = None
 
         try:
             if method == "post":
-                request = await self._session.post(url, headers=headers, timeout=req_timeout)
-            else:
-                request = await self._session.get(url, headers=headers, timeout=req_timeout)
-            request.raise_for_status()
+                response = await self._session.post(url, headers=headers, timeout=req_timeout)
+            elif method == "get":
+                response = await self._session.get(url, headers=headers, timeout=req_timeout)
+
+            response.raise_for_status()
         except ClientResponseError as e:
             if e.status == HTTPStatus.UNAUTHORIZED:
                 exception_msg = f"Authentication failed for {url!s}"
@@ -132,7 +137,7 @@ class Clouding:
         except ClientError as e:
             raise CloudingConnectionError from e
 
-        return request
+        return response
 
     async def _prepare_server_results(self, request: ClientResponse) -> dict[str, CloudingServer]:
         """Parse the API response and populate the internal servers dictionary.

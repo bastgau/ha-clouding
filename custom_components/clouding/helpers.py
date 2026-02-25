@@ -47,7 +47,7 @@ def purge_entities(config_entry: CloudingConfigEntry, hass: HomeAssistant) -> No
             current_entry_id: str = next(iter(device_attributes.config_entries))
             current_server_id: str = next(iter(device_attributes.identifiers))[1].rsplit("_", 1)[1]
 
-        except IndexError as _:
+        except IndexError:
             continue
 
         if current_entry_id == config_entry_id and current_server_id.upper() not in existing_servers:

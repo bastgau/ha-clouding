@@ -46,6 +46,9 @@ async def _async_service(service_call: ServiceCall, data: Mapping[str, Any], act
         data: Additional service call data passed.
         action: The action name to perform (e.g. 'start_server', 'reboot_server').
 
+    Returns:
+        None.
+
     Raises:
         ServiceValidationError: If the device ID is invalid, the config entry is not
             loaded, no valid config entry is found, or the action cannot be performed.

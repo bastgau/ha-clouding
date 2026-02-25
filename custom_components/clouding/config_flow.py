@@ -253,7 +253,7 @@ def _get_data_option_schema() -> vol.Schema:
 class OptionsFlowHandler(OptionsFlow):
     """Options flow used to change configuration (options) of existing instance of integration."""
 
-    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:  # pylint: disable=unused-argument
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle the options flow initialization step.
 
         Validates user input if provided, updates the config entry, and returns
