@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
 import logging
 from typing import TYPE_CHECKING, Any
 
@@ -21,11 +20,11 @@ from .pythonclouding import (
 )
 
 if TYPE_CHECKING:
+    from datetime import timedelta
+
     from homeassistant.core import HomeAssistant
 
 _LOGGER = logging.getLogger(__name__)
-
-SCAN_INTERVAL_UPDATES = timedelta(hours=3)
 
 type CloudingConfigEntry = ConfigEntry[CloudingDataUpdateCoordinator]
 
@@ -35,8 +34,15 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     config_entry: CloudingConfigEntry
 
-    def __init__(self, hass: HomeAssistant, config_entry: CloudingConfigEntry, update_interval: int) -> None:
-        """Initialize the coordinator."""
+    def __init__(self, hass: HomeAssistant, config_entry: CloudingConfigEntry, update_interval: timedelta) -> None:
+        """Initialize the coordinator.
+
+        Args:
+            hass (HomeAssistant): The Home Assistant instance.
+            config_entry (CloudingConfigEntry): The config entry associated with this coordinator.
+            update_interval (timedelta): The timedelta between data updates.
+
+        """
 
         super().__init__(
             hass,
@@ -48,12 +54,17 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         session = async_get_clientsession(hass)
         self.api = Clouding(session, config_entry.data[CONF_API_KEY])
 
-    async def async_update_data(self) -> dict[str, CloudingServer]:
-        """..."""
-        await self._async_update_data()
-
     async def _async_update_data(self) -> dict[str, CloudingServer]:
-        """Fetch the latest data from Clouding.io."""
+        """Fetch the latest data from Clouding.io.
+
+        Returns:
+            dict[str, CloudingServer]: A dictionary mapping server IDs to their CloudingServer instances.
+
+        Raises:
+            ConfigEntryAuthFailed: If the API key is invalid or authentication fails.
+            UpdateFailed: If the API request fails for any other reason.
+
+        """
 
         try:
             servers: dict[str, CloudingServer] = await self.api.get_servers()

@@ -1,4 +1,4 @@
-"""Sensor platform for the Clouding.io integration."""
+"""Binary sensor platform for the Clouding.io integration."""
 
 from __future__ import annotations
 
@@ -31,17 +31,22 @@ PARALLEL_UPDATES = 0
 class EnumCloudingBinarySensor(StrEnum):
     """Clouding sensors."""
 
-    SERVER_RUNNING: str = "is_running"
+    SERVER_RUNNING = "is_running"
 
 
 @dataclass(frozen=True, kw_only=True)
 class CloudingBinarySensorEntityDescription(BinarySensorEntityDescription):
-    """Describe Clouding.io sensor entity."""
+    """Describe Clouding.io binary sensor entity.
+
+    Attributes:
+        name_suffix: The suffix appended to the device name to build the entity name.
+
+    """
 
     name_suffix: str
 
 
-BINARY_SENSOR_ATTRIBUTES: tuple[BinarySensorEntityDescription, ...] = (
+BINARY_SENSOR_ATTRIBUTES: tuple[CloudingBinarySensorEntityDescription, ...] = (
     CloudingBinarySensorEntityDescription(
         key=EnumCloudingBinarySensor.SERVER_RUNNING,
         translation_key=EnumCloudingBinarySensor.SERVER_RUNNING,
@@ -51,7 +56,7 @@ BINARY_SENSOR_ATTRIBUTES: tuple[BinarySensorEntityDescription, ...] = (
 )
 
 
-class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], BinarySensorEntity):  # pylint: disable=too-many-instance-attributes
+class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], BinarySensorEntity):  # pyright: ignore[reportIncompatibleVariableOverride] # pylint: disable=too-many-instance-attributes
     """A Clouding.io binary sensor."""
 
     _attr_attribution = ATTRIBUTION
@@ -64,7 +69,15 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
         description: CloudingBinarySensorEntityDescription,
         device_name: str,
     ) -> None:
-        """Initialize Clouding.io binary sensors."""
+        """Initialize Clouding.io binary sensors.
+
+        Args:
+            coordinator (CloudingDataUpdateCoordinator): The data update coordinator.
+            server_id (str): The unique identifier of the server.
+            description (CloudingBinarySensorEntityDescription): The entity description for this binary sensor.
+            device_name (str): The name of the device as configured.
+
+        """
 
         super().__init__(coordinator)
 
@@ -95,20 +108,37 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
 
     @callback
     def _handle_coordinator_update(self) -> None:
-        """Handle coordinator update."""
+        """Handle coordinator update.
+
+        Returns:
+            None.
+
+        """
 
         self._update_attr()
         super()._handle_coordinator_update()
 
     @property
-    def is_on(self) -> bool:
-        """Return if the service is on."""
+    def is_on(self) -> bool:  # pyright: ignore[reportIncompatibleVariableOverride]
+        """Return if the binary sensor is on.
 
-        return getattr(self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key)
+        Returns:
+            bool: True if the server is running, False otherwise.
+
+        """
+
+        return bool(
+            getattr(self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key)
+        )
 
     @callback
     def _update_attr(self) -> None:
-        """Update attributes for binary sensor."""
+        """Update attributes for binary sensor.
+
+        Returns:
+            None.
+
+        """
 
         try:
             if self.entity_description.key == EnumCloudingBinarySensor.SERVER_RUNNING:
@@ -117,6 +147,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
                     "Last Refresh": dt_util.utcnow(),
                 }
 
+            # Any is intentional: value type depends on the entity description key at runtime
             self._attr_native_value = getattr(
                 self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key
             )
@@ -130,7 +161,17 @@ async def async_setup_entry(
     config_entry: CloudingConfigEntry,
     async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    """Initialize a Clouding.io binary sensor."""
+    """Initialize a Clouding.io binary sensor.
+
+    Args:
+        hass (HomeAssistant): The Home Assistant instance (unused).
+        config_entry (CloudingConfigEntry): The Clouding.io config entry.
+        async_add_entities (AddConfigEntryEntitiesCallback): Callback to register new entities.
+
+    Returns:
+        None.
+
+    """
 
     coordinator = config_entry.runtime_data
     device_name = config_entry.data[CONF_NAME]
