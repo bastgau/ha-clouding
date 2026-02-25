@@ -50,6 +50,7 @@ async def _async_service(service_call: ServiceCall, data: Mapping[str, Any], act
         None.
 
     Raises:
+        KeyError: If the action is not found in MAPPING_SERVICE_ACTION.
         ServiceValidationError: If the device ID is invalid, the config entry is not
             loaded, no valid config entry is found, or the action cannot be performed.
 
