@@ -123,7 +123,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
         """Return if the binary sensor is on.
 
         Returns:
-            result (bool): True if the server is running, False otherwise.
+            bool: True if the server is running, False otherwise.
 
         """
 
@@ -147,6 +147,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
                     "Last Refresh": dt_util.utcnow(),
                 }
 
+            # Any is intentional: value type depends on the entity description key at runtime
             self._attr_native_value = getattr(
                 self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key
             )

@@ -49,7 +49,7 @@ async def validate_connection(hass: HomeAssistant, api_key: str | None) -> dict[
         api_key: The Clouding.io API key to validate.
 
     Returns:
-        A dictionary of errors keyed by field name, or an empty dict if valid.
+        dict[str, str]: A dictionary mapping field names to error keys, or an empty dict if the connection is valid.
 
     """
 
@@ -81,7 +81,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
             user_input: Data submitted by the user, or None on first display.
 
         Returns:
-            A ConfigFlowResult creating the entry on success, or showing the form with errors.
+            ConfigFlowResult: A new entry on success, or the form with errors.
 
         """
         errors: dict[str, str] = {}
@@ -114,7 +114,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
             entry_data: Existing config entry data (unused).
 
         Returns:
-            A ConfigFlowResult delegating to the reauth confirm step.
+            ConfigFlowResult: Delegates to the reauth confirm step.
 
         """
         return await self.async_step_reauth_confirm()
@@ -126,7 +126,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
             user_input: New API key submitted by the user, or None on first display.
 
         Returns:
-            A ConfigFlowResult updating the entry on success, or showing the form with errors.
+            ConfigFlowResult: Updates the entry on success, or shows the form with errors.
 
         """
         errors: dict[str, str] = {}
@@ -159,7 +159,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
             user_input: Updated configuration data submitted by the user, or None on first display.
 
         Returns:
-            A ConfigFlowResult updating the entry on success, or showing the form with errors.
+            ConfigFlowResult: Updates the entry on success, or shows the form with errors.
 
         """
         errors: dict[str, str] = {}
@@ -198,7 +198,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
             config_entry: The current config entry (unused).
 
         Returns:
-            An OptionsFlowHandler instance.
+            OptionsFlowHandler: The options flow handler instance.
 
         """
         return OptionsFlowHandler()
@@ -215,7 +215,7 @@ async def _async_validate_input(
         user_input: The form data submitted by the user.
 
     Returns:
-        A dictionary mapping field names to error keys, or an empty dict if input is valid.
+        dict[str, str]: A dictionary mapping field names to error keys, or an empty dict if input is valid.
 
     """
     if user_input[CONF_UPDATE_INTERVAL] == 1:
@@ -228,7 +228,7 @@ def _get_data_option_schema() -> vol.Schema:
     """Build and return the voluptuous schema for the options form.
 
     Returns:
-        A vol.Schema instance for the options flow form.
+        vol.Schema: A voluptuous schema for the options flow form.
 
     """
     return vol.Schema(
@@ -263,7 +263,7 @@ class OptionsFlowHandler(OptionsFlow):
             user_input: Form data submitted by the user, or None on first load.
 
         Returns:
-            A ConfigFlowResult either creating the entry or showing the form.
+            ConfigFlowResult: A new entry on success, or the form with errors.
 
         """
         if user_input is not None:  # we asked to validate values entered by user
