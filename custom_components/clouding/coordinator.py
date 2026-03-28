@@ -10,6 +10,7 @@ from homeassistant.const import CONF_API_KEY
 from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN
 from .pythonclouding import (
@@ -20,7 +21,7 @@ from .pythonclouding import (
 )
 
 if TYPE_CHECKING:
-    from datetime import timedelta
+    from datetime import datetime, timedelta
 
     from homeassistant.core import HomeAssistant
 
@@ -53,6 +54,7 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         )
         session = async_get_clientsession(hass)
         self.api = Clouding(session, config_entry.data[CONF_API_KEY])
+        self.last_api_call: datetime | None = None
 
     async def _async_update_data(self) -> dict[str, CloudingServer]:
         """Fetch the latest data from Clouding.io.
@@ -67,6 +69,7 @@ class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         """
 
         try:
+            self.last_api_call = dt_util.utcnow()
             servers: dict[str, CloudingServer] = await self.api.get_servers()
         except CloudingAuthenticationError as e:
             raise ConfigEntryAuthFailed(
