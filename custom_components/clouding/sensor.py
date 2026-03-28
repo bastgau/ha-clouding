@@ -204,9 +204,9 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
 
         """
         prev_value = self._attr_native_value
-        prev_icon = self._attr_icon
+
         self._update_attr()
-        if self._attr_native_value != prev_value or self._attr_icon != prev_icon:
+        if self._attr_native_value != prev_value:
             super()._handle_coordinator_update()
 
     @callback
