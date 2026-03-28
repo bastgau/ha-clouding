@@ -33,6 +33,7 @@ class EnumCloudingSensor(StrEnum):
 
     SERVER_FLAVOR = "flavor"
     SERVER_HOSTNAME = "hostname"
+    SERVER_LAST_API_CALL = "last_api_call"
     SERVER_PRIVATE_ID = "private_ip"
     SERVER_RAM_GB = "ram_gb"
     SERVER_CREATED_AT = "created_at"
@@ -114,6 +115,12 @@ SENSOR_ATTRIBUTES: tuple[CloudingSensorEntityDescription, ...] = (
         suggested_unit_of_measurement=UnitOfInformation.GIGABYTES,
         suggested_display_precision=0,
         device_class=SensorDeviceClass.DATA_SIZE,
+    ),
+    CloudingSensorEntityDescription(
+        key=EnumCloudingSensor.SERVER_LAST_API_CALL,
+        translation_key=EnumCloudingSensor.SERVER_LAST_API_CALL,
+        name_suffix="Last API Call",
+        device_class=SensorDeviceClass.TIMESTAMP,
     ),
 )
 
@@ -218,9 +225,12 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
 
         """
         try:
-            self._attr_native_value = getattr(
-                self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key
-            )
+            if self.entity_description.key == EnumCloudingSensor.SERVER_LAST_API_CALL:
+                self._attr_native_value = self.coordinator.last_api_call
+            else:
+                self._attr_native_value = getattr(
+                    self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key
+                )
 
             if self.entity_description.key == EnumCloudingSensor.SERVER_STATUS:
                 value: str = str(self._attr_native_value).lower()

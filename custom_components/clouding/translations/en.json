@@ -95,6 +95,9 @@
             },
             "volume_size_gb": {
                 "name": "SSD"
+            },
+            "last_api_call": {
+                "name": "Last API Call"
             }
         }
     },
