@@ -15,7 +15,7 @@ from homeassistant.components.binary_sensor import (
 from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from homeassistant.util import dt as dt_util, slugify
+from homeassistant.util import slugify
 
 from .const import ATTRIBUTION
 from .coordinator import CloudingConfigEntry, CloudingDataUpdateCoordinator
@@ -115,8 +115,13 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
 
         """
 
+        prev_is_on = self._attr_is_on
+        prev_extra = self._attr_extra_state_attributes
+
         self._update_attr()
-        super()._handle_coordinator_update()
+
+        if self._attr_is_on != prev_is_on or self._attr_extra_state_attributes != prev_extra:
+            super()._handle_coordinator_update()
 
     @property
     def is_on(self) -> bool:  # pyright: ignore[reportIncompatibleVariableOverride]
@@ -127,9 +132,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
 
         """
 
-        return bool(
-            getattr(self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key)
-        )
+        return bool(self._attr_is_on)
 
     @callback
     def _update_attr(self) -> None:
@@ -144,16 +147,14 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
             if self.entity_description.key == EnumCloudingBinarySensor.SERVER_RUNNING:
                 self._attr_extra_state_attributes = {
                     "Value": self.coordinator.api.servers[self._server_unique_id].attr_power_state,
-                    "Last Refresh": dt_util.utcnow(),
                 }
 
-            # Any is intentional: value type depends on the entity description key at runtime
-            self._attr_native_value = getattr(
-                self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key
+            self._attr_is_on = bool(
+                getattr(self.coordinator.api.servers[self._server_unique_id], "attr_" + self.entity_description.key)
             )
 
         except KeyError:
-            self._attr_native_value = None
+            self._attr_is_on = None
 
 
 async def async_setup_entry(
