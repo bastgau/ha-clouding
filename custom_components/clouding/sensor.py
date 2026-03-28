@@ -203,8 +203,11 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
             None.
 
         """
+        prev_value = self._attr_native_value
+        prev_icon = self._attr_icon
         self._update_attr()
-        super()._handle_coordinator_update()
+        if self._attr_native_value != prev_value or self._attr_icon != prev_icon:
+            super()._handle_coordinator_update()
 
     @callback
     def _update_attr(self) -> None:
