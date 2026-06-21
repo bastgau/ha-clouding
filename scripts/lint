@@ -26,7 +26,7 @@ fi
 printf "%s\n" $files
 
 echo -e "\n${YELLOW}> Lint with Ruff :${NC}\n"
-prek run ruff-check --files $files
+ruff check --fix $files
 echo -e "\n${BLUE}[ruff]${NC} ${GREEN}✓ Done.${NC}"
 
 echo -e "\n${YELLOW}> Lint with Pylint :${NC}"
