@@ -6,7 +6,8 @@ from datetime import timedelta
 import logging
 from typing import TYPE_CHECKING, Any
 
-from homeassistant.const import Platform
+from homeassistant.const import CONF_NAME, Platform
+from homeassistant.util import slugify
 
 from .const import (
     CONF_UPDATE_INTERVAL,
@@ -36,6 +37,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable, Coroutine, Mapping
 
     from homeassistant.core import HomeAssistant, ServiceCall
+    from homeassistant.helpers.device_registry import DeviceEntry
 
 PLATFORMS: list[Platform] = [
     Platform.BINARY_SENSOR,
@@ -101,13 +103,14 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
 
         """
 
-        function_call: Callable[[ServiceCall, Mapping[str, Any]], Coroutine[Any, Any, None]] = _SERVICE_MAP[call.service]
+        function_call: Callable[[ServiceCall, Mapping[str, Any]], Coroutine[Any, Any, None]] = _SERVICE_MAP[
+            call.service
+        ]
+
         await function_call(call, call.data)
 
     for service in _SERVICE_MAP:
         hass.services.async_register(DOMAIN, service, execute_service)
-
-    # (@bastgau) call purge_entities(config_entry, hass) here to remove stale devices (not yet implemented)
 
     return True
 
@@ -125,3 +128,17 @@ async def async_unload_entry(hass: HomeAssistant, entry: CloudingConfigEntry) ->
     """
 
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+
+
+async def async_remove_config_entry_device(
+    hass: HomeAssistant,  # noqa: ARG001
+    entry: CloudingConfigEntry,
+    device: DeviceEntry,
+) -> bool:
+    """Remove a config entry from a device."""
+    coordinator = entry.runtime_data
+    device_name = entry.data[CONF_NAME]
+
+    valid_identifiers = {(DOMAIN, slugify(f"{device_name} {server_id}")) for server_id in coordinator.data}
+
+    return not device.identifiers.intersection(valid_identifiers)
