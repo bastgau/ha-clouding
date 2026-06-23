@@ -139,6 +139,6 @@ async def async_remove_config_entry_device(
     coordinator = entry.runtime_data
     device_name = entry.data[CONF_NAME]
 
-    valid_identifiers = {(DOMAIN, slugify(f"{device_name} {server_id}")) for server_id in coordinator.data}
+    valid_identifiers = {(DOMAIN, slugify(f"{device_name} {server_id}")) for server_id in (coordinator.data or {})}
 
     return not device.identifiers.intersection(valid_identifiers)
