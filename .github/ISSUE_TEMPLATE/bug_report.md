@@ -2,8 +2,8 @@
 name: 🐞 Bug report
 description: Report an issue
 about: Use this template for tracking a bug.
-title: ''
-labels: [triage]
+title: ""
+labels: ["issue:bug", "issue:triage"]
 assignees: []
 ---
 
@@ -11,7 +11,7 @@ assignees: []
 Please specify your Home Assistant version.
 
 **Clouding.io Integration version:**
-Please specify your Home Assistant version.
+Please specify your integration version.
 
 **Describe the bug**
 A clear and concise description of what the bug is.
