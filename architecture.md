@@ -15,7 +15,6 @@ custom_components/clouding/
 ├── binary_sensor.py        1 binary sensor per server (is_running)
 ├── services.py             Dispatcher for the 6 server actions
 ├── device_info.py          Builds HA DeviceInfo (manufacturer=Clouding.io)
-├── helpers.py              purge_entities() — exists but IS NOT CALLED
 └── pythonclouding/
     ├── clouding.py         aiohttp HTTP client, base_url=https://api.clouding.io/v1
     ├── models.py           CloudingServer, CloudingServerImage, CloudingPublicPorts (mashumaro)
@@ -90,12 +89,11 @@ JSON fields → `attr_*` properties:
 
 ## Known issues / constraints
 
-1. **`purge_entities()` not called** — servers deleted in Clouding.io leave ghost devices in HA (manual removal required)
-2. **No per-server filtering** — all servers in the API account are imported
-3. **Reload required** — changing `update_interval` requires an integration reload or HA restart
-4. **No webhooks** — pure polling, no event-driven updates
-5. **English only** — only `translations/en.json` provided
-6. **Server-side validation** — services do not check action feasibility before the API call (e.g. stopping an already-stopped server → 400)
+1. **No per-server filtering** — all servers in the API account are imported
+2. **Reload required** — changing `update_interval` requires an integration reload or HA restart
+3. **No webhooks** — pure polling, no event-driven updates
+4. **English only** — only `translations/en.json` provided
+5. **Server-side validation** — services do not check action feasibility before the API call (e.g. stopping an already-stopped server → 400)
 
 ## Key decisions history
 

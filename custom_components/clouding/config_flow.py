@@ -167,7 +167,7 @@ class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
         entry = self._get_reconfigure_entry()
 
         if user_input is not None:
-            self._async_abort_entries_match({"name": user_input[CONF_API_KEY]})
+            self._async_abort_entries_match({"name": self._get_reconfigure_entry().data[CONF_NAME]})
 
             if not (
                 errors := await validate_connection(

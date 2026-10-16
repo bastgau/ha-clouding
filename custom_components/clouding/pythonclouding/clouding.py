@@ -107,10 +107,6 @@ class Clouding:
 
         """
 
-        if method not in ["get", "post"]:
-            msg: str = f"The method with the value '{method}' is unknown"
-            raise KeyError(msg)
-
         exception_msg: str = ""
 
         response: ClientResponse | None = None
