@@ -144,14 +144,8 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# Local-only files and directories (not versioned)
-*.local
-**/*.local
-
 # Developper settings (vscode)
 **/.vscode/settings.json
-.orcommit.json
-.opencommit
 
 # Home Assistant configuration
 config/*

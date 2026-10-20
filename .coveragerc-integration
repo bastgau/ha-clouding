@@ -1,0 +1,19 @@
+# Coverage scope for the `integration` test job (see .github/workflows/test.yml).
+#
+# Exists only to subtract the bundled client from the measurement: pytest-cov's
+# --cov can add paths but never remove one, and `omit` is settable from a
+# config file alone.
+#
+# The client is the `client` job's contract and is covered there, on its own.
+# Measuring it twice would let one job's coverage paper over the other's, which
+# is exactly what splitting them was meant to prevent.
+[run]
+source = custom_components/clouding
+branch = True
+omit =
+    custom_components/clouding/pythonclouding/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if TYPE_CHECKING:
