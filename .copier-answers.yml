@@ -1,17 +1,16 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v0.1.0
+_commit: v0.2.0
 _src_path: gh:bastgau/ha-dev-environment
 client_package: pythonclouding
 client_tests_path: tests/clouding/pythonclouding
-description:
-  Seamlessly manage and monitor your Clouding.io cloud instances from Home
-  Assistant, with automation support and real-time alerts.
+description: Seamlessly manage and monitor your Clouding.io cloud instances from Home
+    Assistant, with automation support and real-time alerts.
 ha_testing_config: false
 integration_domain: clouding
 integration_name: Clouding.io
 lenient_tests: false
 prettier_excludes: card
-python_requires: ">=3.14.2,<3.15"
-python_version: "3.14"
+python_requires: '>=3.14.2,<3.15'
+python_version: '3.14'
 repo_name: ha-clouding
 strict_docstrings: false
