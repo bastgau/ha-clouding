@@ -1,0 +1,60 @@
+---
+# Pre-commit configuration for a Home Assistant custom integration (HACS).
+# Scoped to `custom_components/` and `tests/`. hassfest and HACS validation run in
+# GitHub Actions (see .github/workflows/), not here.
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.0
+    hooks:
+      - id: ruff-check
+        args:
+          - --fix
+        files: ^(custom_components|tests)/.+\.(py|pyi)$
+      - id: ruff-format
+        files: ^(custom_components|tests)/.+\.(py|pyi)$
+
+  - repo: local
+    hooks:
+      # Only fires when a .bru file is staged, i.e. only in a repository whose
+      # client ships a Bruno collection.
+      - id: clean-bruno-headers
+        name: clean-bruno-headers
+        entry: scripts/clean_bruno_headers --check
+        language: system
+        files: \.bru$
+        pass_filenames: false
+      - id: docstring-linter
+        name: docstring-linter
+        entry: uv run --no-sync docstring-linter
+        language: system
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-json
+        exclude: ^(\.vscode|\.devcontainer)/
+      - id: check-yaml
+      - id: check-executables-have-shebangs
+        stages: [manual]
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: no-commit-to-branch
+        args:
+          - --branch=main
+          - --branch=master
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.37.1
+    hooks:
+      - id: yamllint
+
+  - repo: https://github.com/rbubley/mirrors-prettier
+    rev: v3.6.2
+    hooks:
+      - id: prettier
+        additional_dependencies:
+          - prettier@3.6.2
+          - prettier-plugin-sort-json@4.2.0
+        # `card/` holds a vendored third-party card kept diffable against
+        # upstream: reformatting it rewrites every line.
+        exclude: ^(card|custom_components/clouding)/
