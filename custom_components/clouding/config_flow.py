@@ -5,7 +5,7 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-import voluptuous as vol
+import probatio
 
 from homeassistant.config_entries import ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.const import CONF_API_KEY, CONF_NAME
@@ -27,16 +27,16 @@ if TYPE_CHECKING:
 
 _LOGGER = logging.getLogger(__name__)
 
-STEP_USER_DATA_SCHEMA = vol.Schema(
+STEP_USER_DATA_SCHEMA = probatio.Schema(
     {
-        vol.Required(CONF_NAME, default="Clouding.io"): str,
-        vol.Required(CONF_API_KEY, default=""): str,
+        probatio.Required(CONF_NAME, default="Clouding.io"): str,
+        probatio.Required(CONF_API_KEY, default=""): str,
     }
 )
 
-STEP_REAUTH_DATA_SCHEMA = vol.Schema(
+STEP_REAUTH_DATA_SCHEMA = probatio.Schema(
     {
-        vol.Required(CONF_API_KEY, default=""): str,
+        probatio.Required(CONF_API_KEY, default=""): str,
     },
 )
 
@@ -224,18 +224,18 @@ async def _async_validate_input(
     return {}
 
 
-def _get_data_option_schema() -> vol.Schema:
-    """Build and return the voluptuous schema for the options form.
+def _get_data_option_schema() -> probatio.Schema:
+    """Build and return the probatio schema for the options form.
 
     Returns:
-        vol.Schema: A voluptuous schema for the options flow form.
+        probatio.Schema: A probatio schema for the options flow form.
 
     """
-    return vol.Schema(
+    return probatio.Schema(
         {
-            vol.Required(
+            probatio.Required(
                 CONF_UPDATE_INTERVAL,
-            ): vol.All(
+            ): probatio.All(
                 selector.NumberSelector(  # pyright: ignore[reportUnknownMemberType]
                     selector.NumberSelectorConfig(
                         min=15,
@@ -244,7 +244,7 @@ def _get_data_option_schema() -> vol.Schema:
                         mode=selector.NumberSelectorMode.BOX,
                     )
                 ),
-                vol.Coerce(int),
+                probatio.Coerce(int),
             )
         }
     )
