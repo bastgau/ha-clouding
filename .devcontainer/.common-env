@@ -2,5 +2,5 @@ INTEGRATION_DOMAIN=clouding
 INTEGRATION_NAME=Clouding.io
 CLIENT_PACKAGE=pythonclouding
 CLIENT_TESTS_PATH=tests/clouding/pythonclouding
-PRETTIER_EXCLUDES=card,custom_components/clouding
+PRETTIER_EXCLUDES=card
 PYTHON_VERSION=3.14
