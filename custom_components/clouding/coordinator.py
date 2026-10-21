@@ -31,7 +31,14 @@ type CloudingConfigEntry = ConfigEntry[CloudingDataUpdateCoordinator]
 
 
 class CloudingDataUpdateCoordinator(DataUpdateCoordinator[dict[str, Any]]):
-    """Update coordinator for Clouding."""
+    """Update coordinator for Clouding.
+
+    Attributes:
+        config_entry (CloudingConfigEntry): The config entry associated with this coordinator.
+        api (Clouding): The Clouding.io API client.
+        last_api_call (datetime | None): When the API was last called.
+
+    """
 
     config_entry: CloudingConfigEntry
 

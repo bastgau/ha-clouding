@@ -70,7 +70,12 @@ async def validate_connection(hass: HomeAssistant, api_key: str | None) -> dict[
 
 
 class CloudingConfigFlow(ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for Clouding.io."""
+    """Handle a config flow for Clouding.io.
+
+    Attributes:
+        _hassio_discovery (HassioServiceInfo | None): The Supervisor discovery information, if any.
+
+    """
 
     _hassio_discovery: HassioServiceInfo | None = None
 
@@ -251,7 +256,7 @@ def _get_data_option_schema() -> probatio.Schema:
 
 
 class OptionsFlowHandler(OptionsFlow):
-    """Options flow used to change configuration (options) of existing instance of integration."""
+    """Handle the options flow that changes the settings of an existing instance."""
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         """Handle the options flow initialization step.

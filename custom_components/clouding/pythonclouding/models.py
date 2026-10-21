@@ -17,7 +17,7 @@ class CloudingBaseModel(DataClassDictMixin):
     """Base model for Clouding.io API resources.
 
     Attributes:
-        id: The unique identifier of the resource.
+        id (str | None): The unique identifier of the resource.
 
     """
 
@@ -39,7 +39,7 @@ class CloudingServerImage(CloudingBaseModel):
     """Server Image model for Clouding.io.
 
     Attributes:
-        name: The name of the server image.
+        name (str | None): The name of the server image.
 
     """
 
@@ -61,8 +61,8 @@ class CloudingPublicPorts(CloudingBaseModel):
     """Public ports model for a Clouding.io server.
 
     Attributes:
-        ipAddress: The public IP address associated with the port.
-        macAddress: The MAC address associated with the port.
+        ipAddress (str | None): The public IP address associated with the port.
+        macAddress (str | None): The MAC address associated with the port.
 
     """
 
@@ -75,20 +75,20 @@ class CloudingServer(CloudingBaseModel):  # pylint: disable=too-many-instance-at
     """Server model for Clouding.io.
 
     Attributes:
-        createdAt: The datetime when the server was created.
-        dnsAddress: The DNS address of the server.
-        flavor: The flavor (instance type) of the server.
-        hostname: The hostname of the server.
-        image: The image associated with the server.
-        name: The display name of the server.
-        powerState: The current power state of the server.
-        privateIp: The private IP address of the server, if any.
-        publicIp: The public IP address of the server.
-        publicPorts: The list of public ports associated with the server.
-        ramGb: The amount of RAM allocated to the server in gigabytes.
-        status: The current status of the server.
-        vCores: The number of virtual CPU cores allocated to the server.
-        volumeSizeGb: The volume size of the server in gigabytes.
+        createdAt (datetime): The datetime when the server was created.
+        dnsAddress (str): The DNS address of the server.
+        flavor (str): The flavor (instance type) of the server.
+        hostname (str): The hostname of the server.
+        image (CloudingServerImage): The image associated with the server.
+        name (str): The display name of the server.
+        powerState (str): The current power state of the server.
+        privateIp (str | None): The private IP address of the server, if any.
+        publicIp (str): The public IP address of the server.
+        publicPorts (list[CloudingPublicPorts]): The list of public ports associated with the server.
+        ramGb (int): The amount of RAM allocated to the server in gigabytes.
+        status (str): The current status of the server.
+        vCores (int): The number of virtual CPU cores allocated to the server.
+        volumeSizeGb (int): The volume size of the server in gigabytes.
 
     """
 

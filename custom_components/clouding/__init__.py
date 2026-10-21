@@ -59,15 +59,14 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEntry) -> bool:
     """Set up Clouding.io from a config entry.
 
+    The first data refresh runs here: if it fails, Home Assistant retries the setup later (ConfigEntryNotReady).
+
     Args:
         hass (HomeAssistant): The Home Assistant instance.
         config_entry (CloudingConfigEntry): The Clouding.io config entry.
 
     Returns:
         bool: True if the setup was successful.
-
-    Raises:
-        ConfigEntryNotReady: If the first data refresh fails.
 
     """
 
@@ -99,7 +98,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
             call (ServiceCall): The Home Assistant service call object.
 
         Returns:
-            None.
+            None
 
         """
 
@@ -110,7 +109,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
         await function_call(call, call.data)
 
     for service in _SERVICE_MAP:
-        hass.services.async_register(DOMAIN, service, execute_service)
+        hass.services.async_register(DOMAIN, service, execute_service)  # pyright: ignore[reportUnknownMemberType]
 
     return True
 
@@ -131,11 +130,21 @@ async def async_unload_entry(hass: HomeAssistant, entry: CloudingConfigEntry) ->
 
 
 async def async_remove_config_entry_device(
-    hass: HomeAssistant,  # noqa: ARG001
+    _hass: HomeAssistant,
     entry: CloudingConfigEntry,
     device: DeviceEntry,
 ) -> bool:
-    """Remove a config entry from a device."""
+    """Remove a config entry from a device.
+
+    Args:
+        _hass (HomeAssistant): The Home Assistant instance (unused).
+        entry (CloudingConfigEntry): The Clouding.io config entry.
+        device (DeviceEntry): The device the user wants to remove.
+
+    Returns:
+        bool: True if the device no longer matches any server of the account and can be removed.
+
+    """
     coordinator = entry.runtime_data
     device_name = entry.data[CONF_NAME]
 

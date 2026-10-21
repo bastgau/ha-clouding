@@ -47,12 +47,10 @@ async def _async_service(service_call: ServiceCall, data: Mapping[str, Any], act
         action (str): The action name to perform (e.g. 'start_server', 'reboot_server').
 
     Returns:
-        None.
+        None
 
     Raises:
-        KeyError: If the action is not found in MAPPING_SERVICE_ACTION.
-        ServiceValidationError: If the device ID is invalid, the config entry is not
-            loaded, no valid config entry is found, or the action cannot be performed.
+        ServiceValidationError: If the device ID is invalid, the config entry is not loaded, no valid config entry is found, or the action cannot be performed.
 
     """
 
@@ -61,7 +59,7 @@ async def _async_service(service_call: ServiceCall, data: Mapping[str, Any], act
     device_id = service_call.data[CONF_DEVICE_ID]
 
     # Get the device based on the given device ID.
-    device = dr.async_get(service_call.hass).devices.get(device_id)
+    device = dr.async_get(service_call.hass).async_get(device_id, include_child_devices=False)
 
     if device is None:
         raise ServiceValidationError(translation_domain=DOMAIN, translation_key="invalid_device_id")
@@ -110,7 +108,7 @@ async def async_archive_server(service_call: ServiceCall, data: Mapping[str, Any
         data (Mapping[str, Any]): Additional service call data.
 
     Returns:
-        None.
+        None
 
     """
     await _async_service(service_call, data, "archive_server")
@@ -124,7 +122,7 @@ async def async_unarchive_server(service_call: ServiceCall, data: Mapping[str, A
         data (Mapping[str, Any]): Additional service call data.
 
     Returns:
-        None.
+        None
 
     """
     await _async_service(service_call, data, "unarchive_server")
@@ -138,7 +136,7 @@ async def async_hard_reboot_server(service_call: ServiceCall, data: Mapping[str,
         data (Mapping[str, Any]): Additional service call data.
 
     Returns:
-        None.
+        None
 
     """
     await _async_service(service_call, data, "hard_reboot_server")
@@ -152,7 +150,7 @@ async def async_reboot_server(service_call: ServiceCall, data: Mapping[str, Any]
         data (Mapping[str, Any]): Additional service call data.
 
     Returns:
-        None.
+        None
 
     """
     await _async_service(service_call, data, "reboot_server")
@@ -166,7 +164,7 @@ async def async_start_server(service_call: ServiceCall, data: Mapping[str, Any])
         data (Mapping[str, Any]): Additional service call data.
 
     Returns:
-        None.
+        None
 
     """
     await _async_service(service_call, data, "start_server")
@@ -180,7 +178,7 @@ async def async_stop_server(service_call: ServiceCall, data: Mapping[str, Any]) 
         data (Mapping[str, Any]): Additional service call data.
 
     Returns:
-        None.
+        None
 
     """
     await _async_service(service_call, data, "stop_server")
