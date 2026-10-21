@@ -64,23 +64,17 @@ async def _async_service(service_call: ServiceCall, data: Mapping[str, Any], act
     if device is None:
         raise ServiceValidationError(translation_domain=DOMAIN, translation_key="invalid_device_id")
 
-    clouding_current_config_entry: ConfigEntry | None = None
+    # A device belongs to a single config entry.
+    clouding_current_config_entry: ConfigEntry | None = service_call.hass.config_entries.async_get_entry(
+        device.config_entry_id
+    )
 
-    for config_entry_id in device.config_entries:
-        config_entry = service_call.hass.config_entries.async_get_entry(config_entry_id)
-        if not config_entry or config_entry.domain != DOMAIN:
-            # Not the clouding current config entry.
-            continue
-
-        if config_entry.state is not ConfigEntryState.LOADED:
-            raise ServiceValidationError(translation_domain=DOMAIN, translation_key="config_entry_not_loaded")
-
-        clouding_current_config_entry = config_entry
-        break
-
-    if not clouding_current_config_entry:
+    if not clouding_current_config_entry or clouding_current_config_entry.domain != DOMAIN:
         # The device is not connected to a valid clouding current config entry.
         raise ServiceValidationError(translation_domain=DOMAIN, translation_key="no_config_entry")
+
+    if clouding_current_config_entry.state is not ConfigEntryState.LOADED:
+        raise ServiceValidationError(translation_domain=DOMAIN, translation_key="config_entry_not_loaded")
 
     coordinator: CloudingDataUpdateCoordinator = clouding_current_config_entry.runtime_data
 
