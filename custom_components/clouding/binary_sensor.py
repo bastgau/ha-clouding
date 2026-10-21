@@ -119,12 +119,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
 
     @callback
     def _handle_coordinator_update(self) -> None:
-        """Handle coordinator update.
-
-        Returns:
-            None
-
-        """
+        """Handle coordinator update."""
 
         prev_is_on = self._attr_is_on
         prev_extra = self._attr_extra_state_attributes
@@ -147,12 +142,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
 
     @callback
     def _update_attr(self) -> None:
-        """Update attributes for binary sensor.
-
-        Returns:
-            None
-
-        """
+        """Update attributes for binary sensor."""
 
         try:
             if self.entity_description.key == EnumCloudingBinarySensor.SERVER_RUNNING:
@@ -179,9 +169,6 @@ async def async_setup_entry(
         hass (HomeAssistant): The Home Assistant instance (unused).
         config_entry (CloudingConfigEntry): The Clouding.io config entry.
         async_add_entities (AddConfigEntryEntitiesCallback): Callback to register new entities.
-
-    Returns:
-        None
 
     """
 

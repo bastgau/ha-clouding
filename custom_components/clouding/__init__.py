@@ -97,9 +97,6 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: CloudingConfigEnt
         Args:
             call (ServiceCall): The Home Assistant service call object.
 
-        Returns:
-            None
-
         """
 
         function_call: Callable[[ServiceCall, Mapping[str, Any]], Coroutine[Any, Any, None]] = _SERVICE_MAP[
