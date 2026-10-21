@@ -12,10 +12,10 @@ class CloudingDeviceInfo:  # pylint: disable=too-few-public-methods
     """Provide device information for a Clouding.io server entity.
 
     Attributes:
-        _device_name: The integration instance name configured by the user.
-        _model_name: The server image/model name.
-        _server_name: The display name of the server.
-        _server_unique_id: The unique identifier of the server.
+        _device_name (str): The integration instance name configured by the user.
+        _model_name (str): The server image/model name.
+        _server_name (str): The display name of the server.
+        _server_unique_id (str): The unique identifier of the server.
 
     """
 
