@@ -137,9 +137,6 @@ async def async_setup_entry(
         config_entry (CloudingConfigEntry): The Clouding.io config entry.
         async_add_entities (AddConfigEntryEntitiesCallback): Callback to register new entities.
 
-    Returns:
-        None
-
     """
 
     coordinator = config_entry.runtime_data
@@ -218,12 +215,7 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
 
     @callback
     def _handle_coordinator_update(self) -> None:
-        """Handle coordinator update.
-
-        Returns:
-            None
-
-        """
+        """Handle coordinator update."""
         prev_value = self._attr_native_value
 
         self._update_attr()
@@ -232,12 +224,7 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
 
     @callback
     def _update_attr(self) -> None:
-        """Update attributes for sensor.
-
-        Returns:
-            None
-
-        """
+        """Update attributes for sensor."""
         try:
             if self.entity_description.key == EnumCloudingSensor.SERVER_LAST_API_CALL:
                 self._attr_native_value = self.coordinator.last_api_call

@@ -46,9 +46,6 @@ async def _async_service(service_call: ServiceCall, data: Mapping[str, Any], act
         data (Mapping[str, Any]): Additional service call data passed.
         action (str): The action name to perform (e.g. 'start_server', 'reboot_server').
 
-    Returns:
-        None
-
     Raises:
         ServiceValidationError: If the device ID is invalid, the config entry is not loaded, no valid config entry is found, or the action cannot be performed.
 
@@ -101,9 +98,6 @@ async def async_archive_server(service_call: ServiceCall, data: Mapping[str, Any
         service_call (ServiceCall): The Home Assistant service call object.
         data (Mapping[str, Any]): Additional service call data.
 
-    Returns:
-        None
-
     """
     await _async_service(service_call, data, "archive_server")
 
@@ -114,9 +108,6 @@ async def async_unarchive_server(service_call: ServiceCall, data: Mapping[str, A
     Args:
         service_call (ServiceCall): The Home Assistant service call object.
         data (Mapping[str, Any]): Additional service call data.
-
-    Returns:
-        None
 
     """
     await _async_service(service_call, data, "unarchive_server")
@@ -129,9 +120,6 @@ async def async_hard_reboot_server(service_call: ServiceCall, data: Mapping[str,
         service_call (ServiceCall): The Home Assistant service call object.
         data (Mapping[str, Any]): Additional service call data.
 
-    Returns:
-        None
-
     """
     await _async_service(service_call, data, "hard_reboot_server")
 
@@ -142,9 +130,6 @@ async def async_reboot_server(service_call: ServiceCall, data: Mapping[str, Any]
     Args:
         service_call (ServiceCall): The Home Assistant service call object.
         data (Mapping[str, Any]): Additional service call data.
-
-    Returns:
-        None
 
     """
     await _async_service(service_call, data, "reboot_server")
@@ -157,9 +142,6 @@ async def async_start_server(service_call: ServiceCall, data: Mapping[str, Any])
         service_call (ServiceCall): The Home Assistant service call object.
         data (Mapping[str, Any]): Additional service call data.
 
-    Returns:
-        None
-
     """
     await _async_service(service_call, data, "start_server")
 
@@ -170,9 +152,6 @@ async def async_stop_server(service_call: ServiceCall, data: Mapping[str, Any]) 
     Args:
         service_call (ServiceCall): The Home Assistant service call object.
         data (Mapping[str, Any]): Additional service call data.
-
-    Returns:
-        None
 
     """
     await _async_service(service_call, data, "stop_server")
