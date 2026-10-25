@@ -51,7 +51,7 @@ class CloudingSensorEntityDescription(SensorEntityDescription):
     """Describe Clouding.io sensor entity.
 
     Attributes:
-        name_suffix: The suffix appended to the device name to build the entity name.
+        name_suffix (str): The suffix appended to the device name to build the entity name.
 
     """
 
@@ -137,9 +137,6 @@ async def async_setup_entry(
         config_entry (CloudingConfigEntry): The Clouding.io config entry.
         async_add_entities (AddConfigEntryEntitiesCallback): Callback to register new entities.
 
-    Returns:
-        None.
-
     """
 
     coordinator = config_entry.runtime_data
@@ -155,7 +152,21 @@ async def async_setup_entry(
 
 
 class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEntity, CloudingDeviceInfo):  # pyright: ignore[reportIncompatibleVariableOverride] # pylint: disable=too-many-instance-attributes
-    """A Clouding.io sensor."""
+    """A Clouding.io sensor.
+
+    Attributes:
+        _attr_attribution (str): The attribution shown with the entity.
+        _attr_has_entity_name (bool): Use the "Device Name Entity Name" display pattern.
+        entity_id (str): The entity id derived from the device name, the server id and the description.
+        entity_description (CloudingSensorEntityDescription): Describes this entity.
+        _device_name (str): The integration instance name configured by the user.
+        _model_name (str): The server image/model name.
+        _server_name (str): The display name of the server.
+        _server_unique_id (str): The unique identifier of the server.
+        _attr_unique_id (str): The unique id of the entity.
+        _attr_device_info (DeviceInfo): The device the entity belongs to.
+
+    """
 
     _attr_attribution = ATTRIBUTION
     _attr_has_entity_name = True
@@ -204,12 +215,7 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
 
     @callback
     def _handle_coordinator_update(self) -> None:
-        """Handle coordinator update.
-
-        Returns:
-            None.
-
-        """
+        """Handle coordinator update."""
         prev_value = self._attr_native_value
 
         self._update_attr()
@@ -218,12 +224,7 @@ class CloudingSensor(CoordinatorEntity[CloudingDataUpdateCoordinator], SensorEnt
 
     @callback
     def _update_attr(self) -> None:
-        """Update attributes for sensor.
-
-        Returns:
-            None.
-
-        """
+        """Update attributes for sensor."""
         try:
             if self.entity_description.key == EnumCloudingSensor.SERVER_LAST_API_CALL:
                 self._attr_native_value = self.coordinator.last_api_call

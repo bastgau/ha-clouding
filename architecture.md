@@ -24,13 +24,13 @@ custom_components/clouding/
 
 ## Key constants (const.py)
 
-| Constant | Value |
-|---|---|
-| `DOMAIN` | `"clouding"` |
-| `MIN_TIME_BETWEEN_UPDATES` | `timedelta(seconds=300)` |
-| `CONF_UPDATE_INTERVAL` | `"update_interval"` |
-| `DEFAULT_NAME` | `"Clouding.io"` |
-| `PORTAL_URL` | `"https://portal.clouding.io"` |
+| Constant                   | Value                          |
+| -------------------------- | ------------------------------ |
+| `DOMAIN`                   | `"clouding"`                   |
+| `MIN_TIME_BETWEEN_UPDATES` | `timedelta(seconds=300)`       |
+| `CONF_UPDATE_INTERVAL`     | `"update_interval"`            |
+| `DEFAULT_NAME`             | `"Clouding.io"`                |
+| `PORTAL_URL`               | `"https://portal.clouding.io"` |
 
 ## Clouding.io API
 
@@ -44,9 +44,11 @@ custom_components/clouding/
 ## Exposed entities (per server)
 
 ### Sensors (12)
+
 `flavor`, `hostname`, `private_ip`, `ram_gb` (DATA_SIZE, GB), `created_at` (TIMESTAMP), `dns_address`, `name`, `power_state`, `public_ip`, `status` (dynamic icon), `vcores`, `volume_size_gb` (DATA_SIZE, GB)
 
 **Status sensor** — dynamic icon based on value:
+
 - `archived` → `mdi:archive-check-outline`
 - `archiving`/`unarchiving` → `mdi:archive-clock-outline`
 - `stopped` → `mdi:close-circle-outline`
@@ -54,24 +56,26 @@ custom_components/clouding/
 - others → `mdi:check-circle-outline`
 
 ### Binary sensor (1)
+
 - `is_running` — device_class=RUNNING, extra_attr: `{"Value": power_state_string}`
 
 ## HA services (6, all device-targeted via device_id)
 
-| Service | API action |
-|---|---|
-| `start_server` | `start` |
-| `stop_server` | `stop` |
-| `reboot_server` | `reboot` |
+| Service              | API action    |
+| -------------------- | ------------- |
+| `start_server`       | `start`       |
+| `stop_server`        | `stop`        |
+| `reboot_server`      | `reboot`      |
 | `hard_reboot_server` | `hard-reboot` |
-| `archive_server` | `archive` |
-| `unarchive_server` | `unarchive` |
+| `archive_server`     | `archive`     |
+| `unarchive_server`   | `unarchive`   |
 
 After each action → `coordinator.async_refresh()` to pull the updated state.
 
 ## CloudingServer model (mashumaro DataClassDictMixin)
 
 JSON fields → `attr_*` properties:
+
 - `id`, `name`, `hostname`, `flavor`, `status`, `powerState`, `privateIp`, `publicIp`
 - `dnsAddress`, `ramGb`, `vCores`, `volumeSizeGb`, `createdAt` (UTC datetime)
 - `image` (CloudingServerImage: id, name)

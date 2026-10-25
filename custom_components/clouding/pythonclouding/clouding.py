@@ -17,7 +17,16 @@ from .models import CloudingServer
 
 
 class Clouding:
-    """Clouding.io client."""
+    """Clouding.io client.
+
+    Attributes:
+        _base_url (URL): The base URL of the Clouding.io API.
+        _headers (dict[str, str]): The HTTP headers sent with every request (API key).
+        _timeout (ClientTimeout): The timeout applied to every request.
+        _session (ClientSession): The aiohttp client session used to perform HTTP requests.
+        _servers (dict[str, CloudingServer]): The servers returned by the last call to the API.
+
+    """
 
     def __init__(self, session: ClientSession, api_key: str | None = None, timeout: float = 10) -> None:
         """Initialize the Clouding.io client.
@@ -49,14 +58,12 @@ class Clouding:
     async def get_servers(self) -> dict[str, CloudingServer]:
         """Retrieve servers from Clouding.io.
 
+        The errors of the underlying request propagate unchanged: CloudingAuthenticationError (invalid API key),
+        CloudingBadRequestError (malformed request), CloudingConnectionError (request failed or timed out) and
+        CloudingInvalidAPIResponseError (the response has no 'servers' key).
+
         Returns:
             dict[str, CloudingServer]: A dictionary mapping server IDs to their CloudingServer instances.
-
-        Raises:
-            CloudingAuthenticationError: If the API key is invalid or authentication fails.
-            CloudingBadRequestError: If the request is malformed.
-            CloudingConnectionError: If the request fails or times out.
-            CloudingInvalidAPIResponseError: If the response does not contain a 'servers' key.
 
         """
 
@@ -67,17 +74,16 @@ class Clouding:
     async def call_action_server(self, action: str, server_id: str) -> dict[str, Any]:
         """Send an action request to a specific Clouding.io server.
 
+        The errors of the underlying request propagate unchanged: CloudingAuthenticationError (authentication fails),
+        CloudingBadRequestError (the action is not valid for the current server state) and CloudingConnectionError
+        (request failed or timed out).
+
         Args:
             action (str): The action to perform (e.g. 'start', 'stop', 'reboot', 'hard-reboot').
             server_id (str): The unique identifier of the target server.
 
         Returns:
             dict[str, Any]: A dictionary containing JSON response from the API.
-
-        Raises:
-            CloudingAuthenticationError: If authentication fails.
-            CloudingBadRequestError: If the action is not valid for the current server state.
-            CloudingConnectionError: If the request fails or times out.
 
         """
 
@@ -94,13 +100,12 @@ class Clouding:
             url (URL): The target URL for the request.
             headers (dict[str, str]): HTTP headers to include in the request.
             req_timeout (ClientTimeout): The aiohttp ClientTimeout object controlling the request timeout.
-            method (Literal["get", "post"]): HTTP method to use ('get' or 'post').
+            method (Literal['get', 'post']): HTTP method to use ('get' or 'post').
 
         Returns:
             ClientResponse: The aiohttp ClientResponse object.
 
         Raises:
-            KeyError: if the method is not supported.
             CloudingAuthenticationError: If the response status is 401 Unauthorized.
             CloudingBadRequestError: If the response status is 400 Bad Request.
             CloudingConnectionError: If the request fails, times out, or returns another error status.

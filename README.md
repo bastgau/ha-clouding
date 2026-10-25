@@ -19,7 +19,7 @@ This integration lets you monitor and control your [Clouding.io](https://www.clo
 
 ### Services
 
-Manage your [Clouding.io](https://www.clouding.io)  servers with these services:
+Manage your [Clouding.io](https://www.clouding.io) servers with these services:
 
 - **Start Server**: Power on your instance.
 - **Stop Server**: Shut down your instance gracefully.
@@ -63,7 +63,6 @@ The integration is currently translated in few langages :
 4. Set up the integration using the UI:
 
 [![Add Integration](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=clouding)
-
 
 ### Manual Installation
 

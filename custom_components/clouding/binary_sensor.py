@@ -6,12 +6,8 @@ from dataclasses import dataclass
 from enum import StrEnum
 from typing import TYPE_CHECKING
 
-from homeassistant.components.binary_sensor import (
-    DOMAIN as BINARY_SENSOR_DOMAIN,
-    BinarySensorDeviceClass,
-    BinarySensorEntity,
-    BinarySensorEntityDescription,
-)
+from homeassistant.components.binary_sensor import BinarySensorEntity, BinarySensorEntityDescription
+from homeassistant.components.binary_sensor.const import DOMAIN as BINARY_SENSOR_DOMAIN, BinarySensorDeviceClass
 from homeassistant.const import CONF_NAME
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -39,7 +35,7 @@ class CloudingBinarySensorEntityDescription(BinarySensorEntityDescription):
     """Describe Clouding.io binary sensor entity.
 
     Attributes:
-        name_suffix: The suffix appended to the device name to build the entity name.
+        name_suffix (str): The suffix appended to the device name to build the entity name.
 
     """
 
@@ -57,7 +53,22 @@ BINARY_SENSOR_ATTRIBUTES: tuple[CloudingBinarySensorEntityDescription, ...] = (
 
 
 class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], BinarySensorEntity):  # pyright: ignore[reportIncompatibleVariableOverride] # pylint: disable=too-many-instance-attributes
-    """A Clouding.io binary sensor."""
+    """A Clouding.io binary sensor.
+
+    Attributes:
+        _attr_attribution (str): The attribution shown with the entity.
+        _attr_has_entity_name (bool): Use the "Device Name Entity Name" display pattern.
+        entity_id (str): The entity id derived from the device name, the server id and the description.
+        entity_description (CloudingBinarySensorEntityDescription): Describes this entity.
+        _device_name (str): The integration instance name configured by the user.
+        _model_name (str): The server image/model name.
+        _server_name (str): The display name of the server.
+        _server_unique_id (str): The unique identifier of the server.
+        _attr_unique_id (str): The unique id of the entity.
+        _attr_device_info (DeviceInfo): The device the entity belongs to.
+        _attr_extra_state_attributes (dict[str, Any]): The extra state attributes of the entity.
+
+    """
 
     _attr_attribution = ATTRIBUTION
     _attr_has_entity_name = True
@@ -108,12 +119,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
 
     @callback
     def _handle_coordinator_update(self) -> None:
-        """Handle coordinator update.
-
-        Returns:
-            None.
-
-        """
+        """Handle coordinator update."""
 
         prev_is_on = self._attr_is_on
         prev_extra = self._attr_extra_state_attributes
@@ -136,12 +142,7 @@ class CloudingBinarySensor(CoordinatorEntity[CloudingDataUpdateCoordinator], Bin
 
     @callback
     def _update_attr(self) -> None:
-        """Update attributes for binary sensor.
-
-        Returns:
-            None.
-
-        """
+        """Update attributes for binary sensor."""
 
         try:
             if self.entity_description.key == EnumCloudingBinarySensor.SERVER_RUNNING:
@@ -168,9 +169,6 @@ async def async_setup_entry(
         hass (HomeAssistant): The Home Assistant instance (unused).
         config_entry (CloudingConfigEntry): The Clouding.io config entry.
         async_add_entities (AddConfigEntryEntitiesCallback): Callback to register new entities.
-
-    Returns:
-        None.
 
     """
 

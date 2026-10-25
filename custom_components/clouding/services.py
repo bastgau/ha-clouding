@@ -46,13 +46,8 @@ async def _async_service(service_call: ServiceCall, data: Mapping[str, Any], act
         data (Mapping[str, Any]): Additional service call data passed.
         action (str): The action name to perform (e.g. 'start_server', 'reboot_server').
 
-    Returns:
-        None.
-
     Raises:
-        KeyError: If the action is not found in MAPPING_SERVICE_ACTION.
-        ServiceValidationError: If the device ID is invalid, the config entry is not
-            loaded, no valid config entry is found, or the action cannot be performed.
+        ServiceValidationError: If the device ID is invalid, the config entry is not loaded, no valid config entry is found, or the action cannot be performed.
 
     """
 
@@ -61,28 +56,22 @@ async def _async_service(service_call: ServiceCall, data: Mapping[str, Any], act
     device_id = service_call.data[CONF_DEVICE_ID]
 
     # Get the device based on the given device ID.
-    device = dr.async_get(service_call.hass).devices.get(device_id)
+    device = dr.async_get(service_call.hass).async_get(device_id, include_child_devices=False)
 
     if device is None:
         raise ServiceValidationError(translation_domain=DOMAIN, translation_key="invalid_device_id")
 
-    clouding_current_config_entry: ConfigEntry | None = None
+    # A device belongs to a single config entry.
+    clouding_current_config_entry: ConfigEntry | None = service_call.hass.config_entries.async_get_entry(
+        device.config_entry_id
+    )
 
-    for config_entry_id in device.config_entries:
-        config_entry = service_call.hass.config_entries.async_get_entry(config_entry_id)
-        if not config_entry or config_entry.domain != DOMAIN:
-            # Not the clouding current config entry.
-            continue
-
-        if config_entry.state is not ConfigEntryState.LOADED:
-            raise ServiceValidationError(translation_domain=DOMAIN, translation_key="config_entry_not_loaded")
-
-        clouding_current_config_entry = config_entry
-        break
-
-    if not clouding_current_config_entry:
+    if not clouding_current_config_entry or clouding_current_config_entry.domain != DOMAIN:
         # The device is not connected to a valid clouding current config entry.
         raise ServiceValidationError(translation_domain=DOMAIN, translation_key="no_config_entry")
+
+    if clouding_current_config_entry.state is not ConfigEntryState.LOADED:
+        raise ServiceValidationError(translation_domain=DOMAIN, translation_key="config_entry_not_loaded")
 
     coordinator: CloudingDataUpdateCoordinator = clouding_current_config_entry.runtime_data
 
@@ -109,9 +98,6 @@ async def async_archive_server(service_call: ServiceCall, data: Mapping[str, Any
         service_call (ServiceCall): The Home Assistant service call object.
         data (Mapping[str, Any]): Additional service call data.
 
-    Returns:
-        None.
-
     """
     await _async_service(service_call, data, "archive_server")
 
@@ -122,9 +108,6 @@ async def async_unarchive_server(service_call: ServiceCall, data: Mapping[str, A
     Args:
         service_call (ServiceCall): The Home Assistant service call object.
         data (Mapping[str, Any]): Additional service call data.
-
-    Returns:
-        None.
 
     """
     await _async_service(service_call, data, "unarchive_server")
@@ -137,9 +120,6 @@ async def async_hard_reboot_server(service_call: ServiceCall, data: Mapping[str,
         service_call (ServiceCall): The Home Assistant service call object.
         data (Mapping[str, Any]): Additional service call data.
 
-    Returns:
-        None.
-
     """
     await _async_service(service_call, data, "hard_reboot_server")
 
@@ -150,9 +130,6 @@ async def async_reboot_server(service_call: ServiceCall, data: Mapping[str, Any]
     Args:
         service_call (ServiceCall): The Home Assistant service call object.
         data (Mapping[str, Any]): Additional service call data.
-
-    Returns:
-        None.
 
     """
     await _async_service(service_call, data, "reboot_server")
@@ -165,9 +142,6 @@ async def async_start_server(service_call: ServiceCall, data: Mapping[str, Any])
         service_call (ServiceCall): The Home Assistant service call object.
         data (Mapping[str, Any]): Additional service call data.
 
-    Returns:
-        None.
-
     """
     await _async_service(service_call, data, "start_server")
 
@@ -178,9 +152,6 @@ async def async_stop_server(service_call: ServiceCall, data: Mapping[str, Any]) 
     Args:
         service_call (ServiceCall): The Home Assistant service call object.
         data (Mapping[str, Any]): Additional service call data.
-
-    Returns:
-        None.
 
     """
     await _async_service(service_call, data, "stop_server")
