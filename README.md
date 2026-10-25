@@ -7,8 +7,8 @@
 [![HACS validation](https://github.com/bastgau/ha-clouding/actions/workflows/validate-for-hacs.yml/badge.svg)](https://github.com/bastgau/ha-clouding/actions/workflows/validate-for-hacs.yml)
 [![HASSFEST validation](https://github.com/bastgau/ha-clouding/actions/workflows/validate-with-hassfest.yml/badge.svg)](https://github.com/bastgau/ha-clouding/actions/workflows/validate-with-hassfest.yml)
 
-<p align="center" width="100%">
-    <img src="https://brands.home-assistant.io/_/clouding/logo.png">
+<p align="center" width="192">
+    <img src="https://raw.githubusercontent.com/bastgau/ha-clouding/refs/heads/main/custom_components/clouding/brand/icon.png">
 </p>
 
 ## Description
