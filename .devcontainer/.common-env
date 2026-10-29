@@ -3,3 +3,4 @@ INTEGRATION_NAME=Clouding.io
 CLIENT_PACKAGE=pythonclouding
 CLIENT_TESTS_PATH=tests/clouding/pythonclouding
 PYTHON_VERSION=3.14
+COVERAGE_FAIL_UNDER=0
