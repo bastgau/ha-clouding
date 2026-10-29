@@ -1,11 +1,12 @@
 # Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
-_commit: v0.17.0
+_commit: v0.22.0
 _src_path: gh:bastgau/ha-dev-environment
 author_email: contact@bastiengautier.com
 author_name: Bastien Gautier
 client_package: pythonclouding
 client_tests_path: tests/clouding/pythonclouding
 copyright_year: 2026
+coverage_fail_under: 0
 description: Seamlessly manage and monitor your Clouding.io cloud instances from Home
     Assistant, with automation support and real-time alerts.
 github_owner: bastgau
