@@ -1,1 +1,1 @@
-"""Tests of the bundled Clouding.io API client."""
+"""Tests for the Clouding.io API client."""
